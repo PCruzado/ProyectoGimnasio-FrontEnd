@@ -3,7 +3,7 @@ import "../style/FooterGym.css";
 
 const FooterGym = () => {
   return (
-    <div className="bgFooter container-fluid mt-auto" >
+    <div className="bgFooter container-fluid mt-auto">
       <Row className="py-4">
         <Col>
           <Row className="text-center">

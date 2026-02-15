@@ -1,8 +1,13 @@
+import FooterGym from "./components/common/FooterGym";
+import NavbarGym from "./components/common/NavbarGym";
+
 const App = () => {
   return (
-    <div>
-      
-    </div>
+    <>
+      <NavbarGym />
+      <main></main>
+      <FooterGym />
+    </>
   );
 };
 

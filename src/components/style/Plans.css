@@ -1,0 +1,41 @@
+.plan-card {
+  background-color: var(--gym-card) !important;
+  color: var(--gym-text);
+  border: 1px solid #333;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.plan-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--gym-primary);
+}
+
+.plan-destacado {
+  border: 2px solid var(--gym-primary) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.plan-destacado::before {
+  content: "MÁS POPULAR";
+  position: absolute;
+  top: 12px;
+  right: -35px;
+  background-color: var(--gym-primary);
+  color: #000;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 5px 40px;
+  transform: rotate(45deg);
+}
+
+.precio-container .monto {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--gym-primary);
+}
+
+.precio-container .simbolo, .precio-container .periodo {
+  font-size: 1.2rem;
+  color: var(--gym-text);
+}

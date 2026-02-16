@@ -1,0 +1,19 @@
+.navbar {
+  background-color: rgba(18, 18, 18, 0.95) !important;
+  backdrop-filter: blur(10px); /* Efecto Glassmorphism */
+}
+
+.nav-link {
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--gym-primary) !important;
+}
+
+.text-primary {
+  color: var(--gym-primary) !important;
+}

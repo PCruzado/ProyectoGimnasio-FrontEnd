@@ -1,0 +1,53 @@
+/* src/style/Hero.css */
+.hero-container {
+  background: linear-gradient(rgba(18, 18, 18, 0.6), rgba(18, 18, 18, 0.4)), 
+              url('../assets/Entrenador_01.jpg') no-repeat center center/cover;
+  min-height: 80vh; /* min-height es mejor que height fijo para mobile */
+  width: 100%;
+}
+
+.hero-content {
+  background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro para legibilidad */
+  backdrop-filter: blur(5px); /* Efecto moderno de desenfoque */
+}
+
+.hero-container h1 {
+  font-size: 4rem;
+  letter-spacing: -2px;
+  color: var(--gym-text);
+}
+
+.hero-container span {
+  color: var(--gym-primary); /* Resaltamos una palabra clave */
+}
+
+
+
+
+/* Ajustes para Celulares */
+@media (max-width: 576px) {
+  .hero-container {
+    min-height: 60vh;
+    background-attachment: scroll; /* Evita problemas de scroll en iOS */
+  }
+
+  .hero-container h1 {
+    font-size: 2.2rem; /* Título más chico en mobile */
+    line-height: 1.1;
+  }
+
+  .hero-container .lead {
+    font-size: 1rem;
+  }
+}
+
+/* Estilo para los botones en mobile */
+.d-grid .btn-hero {
+  width: 100%; /* Botones a lo ancho en mobile */
+}
+
+@media (min-width: 768px) {
+  .btn-hero {
+    width: auto; /* Botones normales en desktop */
+  }
+}

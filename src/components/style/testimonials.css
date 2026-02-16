@@ -1,0 +1,51 @@
+/* src/style/Testimonials.css */
+.testimonials-section {
+  background-color: var(--gym-card); /* El gris oscuro que definimos */
+  border-radius: 20px;
+  border: 1px solid #333;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Estilo para la frase del testimonio */
+.testimonials-section .display-6 {
+  font-weight: 300;
+  font-style: italic;
+  color: var(--gym-text);
+}
+
+/* Personalización de los controles (flechitas) de Bootstrap */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(1) grayscale(100) brightness(1.5); /* Las hace resaltar sobre el fondo oscuro */
+}
+
+/* Personalización de los indicadores (rayitas de abajo) */
+.carousel-indicators [data-bs-target] {
+  background-color: var(--gym-primary) !important; /* Nuestro naranja/amarillo */
+  width: 12px;
+  height: 12px;
+  border-radius: 50%; /* Los hacemos puntitos en vez de rayas */
+}
+
+/* Pie de foto / Nombre del usuario */
+.blockquote-footer {
+  color: var(--gym-primary) !important;
+  font-weight: bold;
+}
+
+.blockquote-footer cite {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+/* Ajuste responsivo para que el texto no se rompa en celulares */
+@media (max-width: 576px) {
+  .testimonials-section .display-6 {
+    font-size: 1.5rem;
+  }
+  
+  .testimonials-section .p-5 {
+    padding: 2rem !important;
+  }
+}

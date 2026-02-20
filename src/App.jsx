@@ -1,8 +1,9 @@
-import { createBrowserRouter, RouterProvider } from 'react-router';
-import Home from './components/pages/Home';
-import PlanDetail from './components/pages/PlanDetail';
-import Error404 from './components/pages/Error404';
-import Layout from './components/common/Layout'; // Para Navbar y Footer constantes
+import { createBrowserRouter, RouterProvider } from "react-router";
+import Home from "./components/pages/Home";
+import PlanDetail from "./components/pages/PlanDetail";
+import Error404 from "./components/pages/Error404";
+import Layout from "./components/common/Layout"; // Para Navbar y Footer constantes
+import AboutUs from "./components/pages/AboutUs"; // Página del equipo
 
 const router = createBrowserRouter([
   {
@@ -18,7 +19,10 @@ const router = createBrowserRouter([
         path: "detalle-plan/:id",
         element: <PlanDetail />,
       },
-      // Aquí tus compañeros del front sumarán Login, Registro, etc.
+      {
+        path: "nosotros",
+        element: <AboutUs />,
+      },
     ],
   },
 ]);

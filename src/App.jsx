@@ -1,14 +1,34 @@
-import FooterGym from "./components/common/FooterGym";
-import NavbarGym from "./components/common/NavbarGym";
+import { createBrowserRouter, RouterProvider } from "react-router";
 import Home from "./components/pages/Home";
+import PlanDetail from "./components/pages/PlanDetail";
+import Error404 from "./components/pages/Error404";
+import Layout from "./components/common/Layout"; // Para Navbar y Footer constantes
+import AboutUs from "./components/pages/AboutUs"; // Página del equipo
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />, // Este componente tiene el Navbar, Footer y el <Outlet />
+    errorElement: <Error404 />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "detalle-plan/:id",
+        element: <PlanDetail />,
+      },
+      {
+        path: "nosotros",
+        element: <AboutUs />,
+      },
+    ],
+  },
+]);
+
 const App = () => {
-  return (
-    <>
-      <NavbarGym />
-      <Home />
-      <FooterGym />
-    </>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;

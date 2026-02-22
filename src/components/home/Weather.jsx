@@ -6,7 +6,6 @@ const Weather = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // NOTA: En un proyecto real, esto va en un archivo .env
   const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
   const CITY = "San Miguel de Tucuman,AR";
 
@@ -44,28 +43,56 @@ const Weather = () => {
   if (error) return <Alert variant="danger">Error: {error}</Alert>;
 
   return (
-    <Card className="my-4 border-0 shadow-sm bg-light text-dark">
-      <Card.Body className="d-flex align-items-center justify-content-around">
-        <div>
-          <h5 className="mb-0">
+    <Card 
+      className="my-4 border border-secondary shadow-lg bg-black text-light mx-auto" 
+      style={{ borderRadius: '12px', maxWidth: '900px' }}
+    >
+      <Card.Body className="d-flex flex-column flex-md-row align-items-center justify-content-around p-4">
+        
+        {/* Ubicación y Descripción */}
+        <div className="text-center text-md-start mb-3 mb-md-0">
+          <h5 className="mb-1 fw-bold text-primary">
             {weather.name}, {weather.sys.country}
           </h5>
-          <p className="text-capitalize mb-0 text-muted">
+          <p className="text-capitalize mb-0 text-secondary">
             {weather.weather[0].description}
           </p>
         </div>
-        <div className="d-flex align-items-center">
-          {/* Icono dinámico de OpenWeather */}
-          <img
-            src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
-            alt="weather icon"
-          />
-          <h2 className="mb-0 fw-bold">{Math.round(weather.main.temp)}°C</h2>
+        
+        {/* Ícono dinámico y Temperatura */}
+        <div className="d-flex align-items-center mb-3 mb-md-0">
+          {/* Contenedor con resplandor para resaltar la nube */}
+          <div 
+            className="me-3 d-flex align-items-center justify-content-center" 
+            style={{ 
+              backgroundColor: 'rgba(255, 77, 0, 0.1)', 
+              borderRadius: '50%', 
+              width: '80px',
+              height: '80px',
+              boxShadow: '0 0 15px rgba(255, 77, 0, 0.2)'
+            }}
+          >
+            <img
+              src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+              alt="Ícono del clima"
+              style={{ filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.5))' }}
+            />
+          </div>
+          <h2 className="mb-0 fw-bold display-5">{Math.round(weather.main.temp)}°C</h2>
         </div>
-        <div className="d-none d-md-block text-end text-muted">
-          <p className="mb-0">Humedad: {weather.main.humidity}%</p>
-          <p className="mb-0">Viento: {weather.wind.speed} km/h</p>
+
+        {/* Humedad y Viento (Oculto en celulares, visible en tablets/desktop) */}
+        <div className="d-none d-md-block text-end text-secondary small">
+          <p className="mb-2">
+            <i className="bi bi-droplet-half text-primary me-2"></i>
+            Humedad: {weather.main.humidity}%
+          </p>
+          <p className="mb-0">
+            <i className="bi bi-wind text-primary me-2"></i>
+            Viento: {weather.wind.speed} km/h
+          </p>
         </div>
+
       </Card.Body>
     </Card>
   );

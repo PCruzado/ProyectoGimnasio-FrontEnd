@@ -1,12 +1,32 @@
 /* src/style/Services.css */
+
+:root {
+  --gym-primary: #ff4d00;
+  --gym-card: #1e1e1e;
+  --gym-text: #ffffff;
+  --gym-desc: #adb5bd; /* Gris claro con alto contraste */
+}
+
 .service-item {
   transition: all 0.3s ease;
   border-radius: 15px;
+  background-color: transparent;
 }
 
 .service-item:hover {
   background-color: var(--gym-card);
-  transform: scale(1.05);
+  transform: translateY(-10px); /* Un efecto más elegante */
+}
+
+/* Forzamos el color de la descripción para que se note */
+.service-item p {
+  color: var(--gym-desc) !important; 
+  line-height: 1.4;
+  margin-top: 0.8rem;
+}
+
+.service-item:hover p {
+  color: #ffffff !important; /* Resalta al pasar el mouse */
 }
 
 .icon-box {
@@ -19,11 +39,11 @@
   justify-content: center;
   border-radius: 50%;
   font-size: 2rem;
-  box-shadow: 0 0 15px rgba(255, 77, 0, 0.4);
+  box-shadow: 0 0 20px rgba(255, 77, 0, 0.3);
 }
 
 .service-item h4 {
   color: var(--gym-text);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   margin-top: 1rem;
 }

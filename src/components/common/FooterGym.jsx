@@ -1,59 +1,39 @@
-import { Col, Row } from "react-bootstrap";
-import "../style/FooterGym.css";
+import { Container, Row, Col } from 'react-bootstrap';
 
 const FooterGym = () => {
   return (
-    <div className="bgFooter container-fluid mt-auto">
-      <Row className="py-4">
-        <Col>
-          <Row className="text-center">
-            <div className="mb-3">
-              <strong>Seguinos</strong>
+    <footer className="bg-black py-5 border-top border-secondary mt-auto">
+      <Container>
+        <Row className="gy-4 text-center text-md-start">
+          <Col md={4}>
+            <h5 className="text-primary fw-bold mb-3">ROLLING GYM</h5>
+            <p className="text-muted small">
+              Transformando cuerpos y vidas en San Miguel de Tucumán desde 2026.
+            </p>
+          </Col>
+          <Col md={4}>
+            <h6 className="fw-bold mb-3">CONTACTO</h6>
+            <ul className="list-unstyled small text-muted">
+              <li><i className="bi bi-geo-alt me-2"></i> Gral. Paz 576, Tucumán</li>
+              <li><i className="bi bi-telephone me-2"></i> +54 381 222-2222</li>
+              <li><i className="bi bi-envelope me-2"></i> info@rollinggym.com</li>
+            </ul>
+          </Col>
+          <Col md={4} className="text-center">
+            <h6 className="fw-bold mb-3">SÍGUENOS</h6>
+            <div className="d-flex justify-content-center gap-3 fs-4">
+              <a href="#" className="text-light"><i className="bi bi-instagram"></i></a>
+              <a href="#" className="text-light"><i className="bi bi-facebook"></i></a>
+              <a href="#" className="text-light"><i className="bi bi-twitter-x"></i></a>
             </div>
-
-            <Col>
-              <i className="bi bi-facebook fs-3"></i>
-            </Col>
-            <Col>
-              <i className="bi bi-instagram fs-3"></i>
-            </Col>
-            <Col>
-              <i className="bi bi-twitter-x fs-3"></i>
-            </Col>
-          </Row>
-        </Col>
-
-        <Col className="text-center">
-          <div className="mb-3">
-            <strong>Contacto</strong>
-          </div>
-
-          <p>Direccion</p>
-          <p>222222222</p>
-          <p>info@gym.com</p>
-        </Col>
-        <Col className="text-center">
-          <div className="mb-3">
-            <strong>Links Rapidos</strong>
-          </div>
-
-          <p>Inicio</p>
-          <p>Nosotros</p>
-          <p>Contacto</p>
-          <p>Registrarse</p>
-        </Col>
-      </Row>
-      <Row className="text-center container-fluid">
-        <div className="py-4 border-top border-secondary ">
-          <div className="text-white">
-            <p>© 2026 Gym. Todos los derechos reservados.</p>
-          </div>
-          <div className="text-white">
-            <p>Desarrollado por Nosotros</p>
-          </div>
-        </div>
-      </Row>
-    </div>
+          </Col>
+        </Row>
+        <hr className="border-secondary my-4" />
+        <p className="text-center text-muted mb-0 small">
+          &copy; 2026 Rolling Gym. Todos los derechos reservados.
+        </p>
+      </Container>
+    </footer>
   );
 };
 

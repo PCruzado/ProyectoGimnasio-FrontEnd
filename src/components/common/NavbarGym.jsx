@@ -2,7 +2,7 @@ import { Navbar, Container, Nav, Button } from "react-bootstrap";
 import { NavLink, Link } from "react-router"; // Importamos los componentes de navegación
 import "../style/NavbarGym.css"; // Asegúrate de tener estilos para el navbar
 
-const NavbarGym = () => {
+const NavbarGym = ({ onLoginClick }) => {
   return (
     <Navbar
       bg="dark"
@@ -41,8 +41,7 @@ const NavbarGym = () => {
             </Nav.Link>
 
             <Button
-              as={Link}
-              to="/login"
+              onClick={onLoginClick}
               variant="outline-primary"
               className="ms-lg-3 mt-3 mt-lg-0 px-4 fw-bold"
             >

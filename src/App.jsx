@@ -4,6 +4,7 @@ import PlanDetail from "./components/pages/PlanDetail";
 import Error404 from "./components/pages/Error404";
 import Layout from "./components/common/Layout"; // Para Navbar y Footer constantes
 import AboutUs from "./components/pages/AboutUs"; // Página del equipo
+import LoginModal from "./components/common/LoginModal"; // Modal de login
 
 const router = createBrowserRouter([
   {

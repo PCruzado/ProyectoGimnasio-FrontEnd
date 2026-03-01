@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
-const LoginModal = ({ show, handleClose }) => {
+const LoginModal = ({ show, handleClose, onSwitchToRegister }) => {
   // Estados para guardar los valores del formulario y los errores
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
@@ -126,9 +126,12 @@ const LoginModal = ({ show, handleClose }) => {
             <span className="text-muted" style={{ fontSize: "0.9rem" }}>
               ¿No tienes una cuenta?{" "}
             </span>
-            <a href="#register" className="text-decoration-none fw-semibold">
+            <span className="text-primary fw-semibold" style={{ cursor: "pointer" }} onClick={() => {
+              handleClose(); // Cerramos el modal de login
+              onSwitchToRegister(); // Llamamos a la función que abre el modal de registro
+            }}>
               Regístrate aquí
-            </a>
+            </span  >
           </div>
         </Form>
       </Modal.Body>

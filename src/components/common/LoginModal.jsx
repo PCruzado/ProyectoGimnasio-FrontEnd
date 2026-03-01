@@ -65,7 +65,6 @@ const LoginModal = ({ show, handleClose }) => {
       <Modal.Header closeButton className="border-0 pb-0">
         <Modal.Title className="fw-bold fs-4">Iniciar Sesión</Modal.Title>
       </Modal.Header>
-
       <Modal.Body className="px-4 pb-4">
         <p className="text-muted mb-4">
           ¡Qué bueno verte de nuevo! Ingresa tus datos para continuar.

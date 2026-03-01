@@ -1,0 +1,31 @@
+:root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+:root {
+  --gym-dark: #121212;
+  --gym-card: #1e1e1e;
+  --gym-primary: #ff4d00; /* Naranja fuerte para energía */
+  --gym-text: #f8f9fa;
+}
+
+body {
+  background-color: var(--gym-dark);
+  color: var(--gym-text);
+  font-family: "Roboto", sans-serif; /* Tipografía común en fitness */
+}
+
+/* Sobrescribimos el botón primario de Bootstrap */
+.btn-primary {
+  background-color: var(--gym-primary) !important;
+  border-color: var(--gym-primary) !important;
+  color: #000 !important;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.btn-primary:hover {
+  background-color: #e64500 !important;
+  filter: brightness(1.1);
+}

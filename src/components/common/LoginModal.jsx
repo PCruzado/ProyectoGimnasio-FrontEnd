@@ -65,7 +65,6 @@ const LoginModal = ({ show, handleClose, onSwitchToRegister }) => {
       <Modal.Header closeButton className="border-0 pb-0">
         <Modal.Title className="fw-bold fs-4">Iniciar Sesión</Modal.Title>
       </Modal.Header>
-
       <Modal.Body className="px-4 pb-4">
         <p className="text-muted mb-4">
           ¡Qué bueno verte de nuevo! Ingresa tus datos para continuar.
@@ -81,7 +80,7 @@ const LoginModal = ({ show, handleClose, onSwitchToRegister }) => {
               className="p-2"
               value={form.email}
               onChange={(e) => setField("email", e.target.value)}
-              isInvalid={!!errors.email} // Pone el borde rojo si hay error
+              isInvalid={!!errors.email}
             />
             {/* Componente de Bootstrap que muestra el texto del error */}
             <Form.Control.Feedback type="invalid">
@@ -91,14 +90,7 @@ const LoginModal = ({ show, handleClose, onSwitchToRegister }) => {
 
           <Form.Group className="mb-4" controlId="formBasicPassword">
             <div className="d-flex justify-content-between align-items-center mb-1">
-              <Form.Label className="fw-semibold mb-0">Contraseña</Form.Label>
-              <a
-                href="#forgot"
-                className="text-decoration-none text-primary"
-                style={{ fontSize: "0.85rem" }}
-              >
-                ¿Olvidaste tu contraseña?
-              </a>
+              <Form.Label className="fw-semibold mb-0">Contraseña</Form.Label>          
             </div>
             <Form.Control
               type="password"

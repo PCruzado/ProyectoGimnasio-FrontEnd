@@ -80,7 +80,7 @@ const LoginModal = ({ show, handleClose }) => {
               className="p-2"
               value={form.email}
               onChange={(e) => setField("email", e.target.value)}
-              isInvalid={!!errors.email} // Pone el borde rojo si hay error
+              isInvalid={!!errors.email}
             />
             {/* Componente de Bootstrap que muestra el texto del error */}
             <Form.Control.Feedback type="invalid">

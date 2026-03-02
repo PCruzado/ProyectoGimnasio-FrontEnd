@@ -90,7 +90,14 @@ const LoginModal = ({ show, handleClose }) => {
 
           <Form.Group className="mb-4" controlId="formBasicPassword">
             <div className="d-flex justify-content-between align-items-center mb-1">
-              <Form.Label className="fw-semibold mb-0">Contraseña</Form.Label>          
+              <Form.Label className="fw-semibold mb-0">Contraseña</Form.Label>
+              <a
+                href="#forgot"
+                className="text-decoration-none text-primary"
+                style={{ fontSize: "0.85rem" }}
+              >
+                ¿Olvidaste tu contraseña?
+              </a>
             </div>
             <Form.Control
               type="password"

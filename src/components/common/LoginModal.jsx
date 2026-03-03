@@ -1,88 +1,108 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 
-const LoginModal = ({ show, handleClose, onSwitchToRegister }) => {
-  // Estados para guardar los valores del formulario y los errores
+// Agregamos 'onSuccess' a las props para avisarle al Layout
+const LoginModal = ({ show, handleClose, onSwitchToRegister, onSuccess }) => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
 
-  // Función para actualizar los valores y limpiar errores al escribir
   const setField = (field, value) => {
-    setForm({
-      ...form,
-      [field]: value,
-    });
-    // Si hay un error en este campo, lo borramos al empezar a escribir
+    setForm({ ...form, [field]: value });
     if (!!errors[field]) {
-      setErrors({
-        ...errors,
-        [field]: null,
-      });
+      setErrors({ ...errors, [field]: null });
     }
   };
 
-  // Función que contiene la lógica de validación
   const validateForm = () => {
     const newErrors = {};
-
-    // Validación del Correo
     if (!form.email) {
       newErrors.email = "El correo electrónico es obligatorio";
     } else if (!/\S+@\S+\.\S+/.test(form.email)) {
       newErrors.email = "Ingresa un correo válido (ej: nombre@correo.com)";
     }
 
-    // Validación de la Contraseña
     if (!form.password) {
       newErrors.password = "La contraseña es obligatoria";
     } else if (form.password.length < 6) {
       newErrors.password = "La contraseña debe tener al menos 6 caracteres";
     }
-
     return newErrors;
   };
 
-  // Función que se ejecuta al enviar el formulario
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Evita que la página se recargue
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const formErrors = validateForm();
 
     if (Object.keys(formErrors).length > 0) {
-      // Si hay errores, actualizamos el estado para mostrarlos
       setErrors(formErrors);
     } else {
-      // Si no hay errores, procedemos con el inicio de sesión
-      console.log("Datos listos para enviar al backend:", form);
-      // Aquí iría tu llamada a la API (ej: axios.post('/api/login', form))
-      
-      // Opcional: cerrar el modal después de un login exitoso
-      // handleClose(); 
+      const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL;
+      const ADMIN_PASS = import.meta.env.VITE_ADMIN_PASSWORD;
+
+      if (form.email === ADMIN_EMAIL && form.password === ADMIN_PASS) {
+        const adminUser = {
+          nombre: "Administrador Rolling",
+          role: "admin",
+          email: form.email,
+        };
+
+        localStorage.setItem("user-rolling-gym", JSON.stringify(adminUser));
+
+        // --- CAMBIO CLAVE: Avisamos al Layout para que actualice el Navbar ---
+        onSuccess(adminUser); 
+
+        handleClose();
+
+        setTimeout(() => {
+          Swal.fire({
+            title: "¡Bienvenido, Admin!",
+            icon: "success",
+            confirmButtonColor: "#ff4d00",
+            timer: 1500,
+            showConfirmButton: false,
+          });
+          navigate("/admin");
+        }, 100);
+      } else {
+        Swal.fire("Error", "Credenciales incorrectas", "error");
+      }
     }
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered backdrop="static">
-      <Modal.Header closeButton className="border-0 pb-0">
-        <Modal.Title className="fw-bold fs-4">Iniciar Sesión</Modal.Title>
+    <Modal 
+      show={show} 
+      onHide={handleClose} 
+      centered 
+      backdrop="static"
+      restoreFocus={false} 
+      contentClassName="bg-black text-light border border-secondary shadow-lg"
+    >
+      <Modal.Header closeButton closeVariant="white" className="border-secondary pb-0">
+        <Modal.Title className="fw-bold fs-4 text-uppercase">
+          Iniciar <span className="text-primary">Sesión</span>
+        </Modal.Title>
       </Modal.Header>
-      <Modal.Body className="px-4 pb-4">
-        <p className="text-muted mb-4">
+
+      <Modal.Body className="px-4 pb-4 mt-2">
+        <p className="text-secondary mb-4">
           ¡Qué bueno verte de nuevo! Ingresa tus datos para continuar.
         </p>
 
-        {/* Agregamos onSubmit al Form */}
         <Form onSubmit={handleSubmit} noValidate>
           <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label className="fw-semibold">Correo Electrónico</Form.Label>
+            <Form.Label className="fw-semibold text-light">Correo Electrónico</Form.Label>
             <Form.Control
               type="email"
               placeholder="ejemplo@correo.com"
-              className="p-2"
+              className="p-2 bg-dark text-light border-secondary shadow-none"
               value={form.email}
               onChange={(e) => setField("email", e.target.value)}
               isInvalid={!!errors.email}
             />
-            {/* Componente de Bootstrap que muestra el texto del error */}
             <Form.Control.Feedback type="invalid">
               {errors.email}
             </Form.Control.Feedback>
@@ -90,15 +110,18 @@ const LoginModal = ({ show, handleClose, onSwitchToRegister }) => {
 
           <Form.Group className="mb-4" controlId="formBasicPassword">
             <div className="d-flex justify-content-between align-items-center mb-1">
-              <Form.Label className="fw-semibold mb-0">Contraseña</Form.Label>          
+              <Form.Label className="fw-semibold text-light mb-0">Contraseña</Form.Label>
+              <a href="#forgot" className="text-decoration-none text-primary small">
+                ¿Olvidaste tu contraseña?
+              </a>
             </div>
             <Form.Control
               type="password"
               placeholder="Ingresa tu contraseña"
-              className="p-2"
+              className="p-2 bg-dark text-light border-secondary shadow-none"
               value={form.password}
               onChange={(e) => setField("password", e.target.value)}
-              isInvalid={!!errors.password} // Pone el borde rojo si hay error
+              isInvalid={!!errors.password}
             />
             <Form.Control.Feedback type="invalid">
               {errors.password}
@@ -108,22 +131,21 @@ const LoginModal = ({ show, handleClose, onSwitchToRegister }) => {
           <Button
             variant="primary"
             type="submit"
-            className="w-100 mb-3 py-2 fw-bold"
+            className="w-100 mb-3 py-2 fw-bold text-uppercase"
             style={{ borderRadius: "8px" }}
           >
             Ingresar
           </Button>
 
           <div className="text-center mt-3">
-            <span className="text-muted" style={{ fontSize: "0.9rem" }}>
-              ¿No tienes una cuenta?{" "}
-            </span>
-            <span className="text-primary fw-semibold" style={{ cursor: "pointer" }} onClick={() => {
-              handleClose(); // Cerramos el modal de login
-              onSwitchToRegister(); // Llamamos a la función que abre el modal de registro
-            }}>
+            <span className="text-secondary small">¿No tienes una cuenta? </span>
+            <span 
+              className="text-primary fw-semibold small" 
+              style={{ cursor: "pointer", textDecoration: "underline" }}
+              onClick={onSwitchToRegister}
+            >
               Regístrate aquí
-            </span  >
+            </span>
           </div>
         </Form>
       </Modal.Body>

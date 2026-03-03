@@ -6,6 +6,7 @@ import RegisterModal from "./RegisterModal";
 import FooterGym from "./FooterGym";
 
 const Layout = () => {
+  // 1. Estados independientes para cada modal
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [user, setUser] = useState(null); // Estado global del usuario

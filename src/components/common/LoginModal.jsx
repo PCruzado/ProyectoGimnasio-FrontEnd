@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
 
-// Recibimos onSwitchToRegister para conectar con el RegisterModal
-const LoginModal = ({ show, handleClose, onSwitchToRegister }) => {
+// Agregamos 'onSuccess' a las props para avisarle al Layout
+const LoginModal = ({ show, handleClose, onSwitchToRegister, onSuccess }) => {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
@@ -51,10 +51,11 @@ const LoginModal = ({ show, handleClose, onSwitchToRegister }) => {
 
         localStorage.setItem("user-rolling-gym", JSON.stringify(adminUser));
 
-        // 1. Cerramos el modal primero para limpiar los atributos ARIA
+        // --- CAMBIO CLAVE: Avisamos al Layout para que actualice el Navbar ---
+        onSuccess(adminUser); 
+
         handleClose();
 
-        // 2. Usamos un pequeño delay para que la animación termine antes de navegar
         setTimeout(() => {
           Swal.fire({
             title: "¡Bienvenido, Admin!",
@@ -77,7 +78,7 @@ const LoginModal = ({ show, handleClose, onSwitchToRegister }) => {
       onHide={handleClose} 
       centered 
       backdrop="static"
-      restoreFocus={false} // SOLUCIÓN AL ERROR DE CONSOLA
+      restoreFocus={false} 
       contentClassName="bg-black text-light border border-secondary shadow-lg"
     >
       <Modal.Header closeButton closeVariant="white" className="border-secondary pb-0">
@@ -141,7 +142,7 @@ const LoginModal = ({ show, handleClose, onSwitchToRegister }) => {
             <span 
               className="text-primary fw-semibold small" 
               style={{ cursor: "pointer", textDecoration: "underline" }}
-              onClick={onSwitchToRegister} // Cambia al modal de Registro
+              onClick={onSwitchToRegister}
             >
               Regístrate aquí
             </span>

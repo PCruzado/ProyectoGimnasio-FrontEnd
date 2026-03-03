@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router"; 
 import NavbarGym from "./NavbarGym";
 import LoginModal from "./LoginModal";
-// import RegisterModal from "./RegisterModal";
+import RegisterModal from "./RegisterModal";
 import FooterGym from "./FooterGym";
 
 const Layout = () => {

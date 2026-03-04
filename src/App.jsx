@@ -6,6 +6,7 @@ import Layout from "./components/common/Layout"; // Para Navbar y Footer constan
 import AboutUs from "./components/pages/AboutUs"; // Página del equipo
 import Admin from "./components/pages/Admin"; // Panel de administración
 import ProtectedRoute from "./components/routes/ProtectedRoute";
+import StaffDetail from "./components/pages/StaffDetail";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "nosotros",
         element: <AboutUs />,
+      },
+      {
+        path: "staff/:id",
+        element: <StaffDetail />,
       },
     ],
   },

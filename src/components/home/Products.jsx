@@ -1,27 +1,58 @@
-import { Row, Col, Card, Button } from 'react-bootstrap';
-import { creatina, proteina, remeraOversize } from '../assets/productos';
+import { useState, useEffect } from 'react';
+import { Row, Col, Card, Button, Spinner } from 'react-bootstrap';
+import { useNavigate } from 'react-router';
+import axios from 'axios';
 
 const Products = () => {
-  const productos = [
-    { id: 1, nombre: "Proteína Whey 1kg", precio: "35.000", img: proteina },
-    { id: 2, nombre: "Creatina Monohidrato", precio: "28.000", img: creatina },
-    { id: 3, nombre: "Remera Gym Oversize", precio: "12.000", img: remeraOversize }
-  ];
+  const navigate = useNavigate();
+  const [productos, setProductos] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // useEffect es el "disparador" que trae los datos al abrir la página
+  useEffect(() => {
+    const traerProductos = async () => {
+      try {
+        const { data } = await axios.get("http://localhost:4000/api/productos");
+        setProductos(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error al cargar la tienda", error);
+        setLoading(false);
+      }
+    };
+
+    traerProductos();
+  }, []);
+
+  if (loading) return <Spinner animation="grow" variant="primary" className="d-block mx-auto my-4" />;
 
   return (
     <Row className="gy-4 py-4">
-      {productos.map(p => (
-        <Col key={p.id} xs={12} sm={6} lg={4}>
-          <Card className="h-100 bg-transparent border-secondary text-light">
-            <Card.Img variant="top" src={p.img} style={{ height: '200px', objectFit: 'cover' }} />
-            <Card.Body className="text-center">
-              <Card.Title>{p.nombre}</Card.Title>
-              <h5 className="text-primary fw-bold">${p.precio}</h5>
-              <Button variant="outline-primary" size="sm" className="mt-2">Ver Detalle</Button>
-            </Card.Body>
-          </Card>
-        </Col>
-      ))}
+      {productos.length === 0 ? (
+        <p className="text-center text-secondary">No hay suplementos disponibles en este momento.</p>
+      ) : (
+        productos.map(p => (
+          <Col key={p._id} xs={12} sm={6} lg={4}>
+            <Card className="h-100 bg-black border-secondary text-light shadow hover-card">
+              <Card.Img variant="top" src={p.imagen} style={{ height: '220px', objectFit: 'contain', padding: '10px' }} />
+              <Card.Body className="text-center d-flex flex-column">
+                <Card.Title className="fw-bold">{p.nombre}</Card.Title>
+                <Card.Text className="text-secondary small flex-grow-1">
+                  {p.categoria}
+                </Card.Text>
+                <h5 className="text-primary fw-bold mb-3">${p.precio}</h5>
+                <Button 
+                  variant="outline-primary" 
+                  className="w-100 fw-bold mt-auto"
+                  onClick={() => navigate(`/producto/${p._id}`)}
+                >
+                  VER DETALLES
+                </Button>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))
+      )}
     </Row>
   );
 };

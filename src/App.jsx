@@ -2,20 +2,21 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import Home from "./components/pages/Home";
 import PlanDetail from "./components/pages/PlanDetail";
 import Error404 from "./components/pages/Error404";
-import Layout from "./components/common/Layout"; // Para Navbar y Footer constantes
-import AboutUs from "./components/pages/AboutUs"; // Página del equipo
-import Admin from "./components/pages/Admin"; // Panel de administración
+import Layout from "./components/common/Layout";
+import AboutUs from "./components/pages/AboutUs";
+import Admin from "./components/pages/Admin";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 import StaffDetail from "./components/pages/StaffDetail";
+import ProductDetail from "./components/pages/ProductDetail";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />, // Este componente tiene el Navbar, Footer y el <Outlet />
+    element: <Layout />,
     errorElement: <Error404 />,
     children: [
       {
-        path: "/",
+        index: true,
         element: <Home />,
       },
       {
@@ -37,6 +38,14 @@ const router = createBrowserRouter([
       {
         path: "staff/:id",
         element: <StaffDetail />,
+      },
+      {
+        path: "producto/:id",
+        element: <ProductDetail />,
+      },
+      {
+        path: "*",
+        element: <Error404 />,
       },
     ],
   },

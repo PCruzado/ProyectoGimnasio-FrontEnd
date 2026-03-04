@@ -1,33 +1,60 @@
 import { Navbar, Container, Nav, Button } from "react-bootstrap";
-import { NavLink, Link } from "react-router"; 
+import { NavLink, Link, useLocation } from "react-router"; 
 import "../style/NavbarGym.css";
 
 const NavbarGym = ({ onLoginClick, user, onLogout }) => {
+  const location = useLocation();
+
+  // Función para subir al inicio (Scroll to top)
+  const handleScrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth" // Hace que el subidón sea suave
+    });
+  };
+
   return (
     <Navbar bg="dark" variant="dark" expand="lg" sticky="top" className="py-3 shadow-lg">
       <Container>
-        <Navbar.Brand as={Link} to="/" className="fw-bold fs-3">
+        {/* Logo con subida automática al inicio */}
+        <Navbar.Brand 
+          as={Link} 
+          to="/" 
+          onClick={handleScrollToTop} 
+          className="fw-bold fs-3"
+        >
           <span className="text-primary">ROLLING</span>GYM
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto align-items-center">
-            <Nav.Link as={NavLink} to="/" className="mx-2">Inicio</Nav.Link>
-            <Nav.Link href="/#servicios" className="mx-2">Servicios</Nav.Link>
-            <Nav.Link href="/#planes" className="mx-2">Planes</Nav.Link>
-            <Nav.Link
-              as={NavLink}
-              to="/nosotros"
-              className={({ isActive }) => isActive ? "nav-link active text-primary" : "nav-link"}
+            
+            {/* Inicio: Agregamos 'end' para que no quede activo cuando entras a otras páginas */}
+            <Nav.Link 
+              as={NavLink} 
+              to="/" 
+              end 
+              onClick={handleScrollToTop} 
+              className="mx-2"
             >
+              Inicio
+            </Nav.Link>
+
+            {/* Cambiamos href por NavLink para evitar recargas bruscas */}
+            <Nav.Link as={NavLink} to="/nosotros" className="mx-2">
               Nosotros
+            </Nav.Link>
+
+            <Nav.Link as={NavLink} to="/contacto" className="mx-2">
+              Contacto
             </Nav.Link>
 
             {/* Renderizado Condicional */}
             {user ? (
               <>
-                {user.role === "admin" && (
+                {/* Corregido: Tu modelo de backend usa 'rol' y 'administrador' */}
+                {user.rol === "administrador" && (
                   <Nav.Link as={NavLink} to="/admin" className="mx-2 text-warning fw-bold">
                     ADMIN
                   </Nav.Link>

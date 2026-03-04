@@ -10,6 +10,11 @@
   transition: color 0.3s ease;
 }
 
+.nav-link.active {
+  color: #ff4d00 !important; /* El naranja de Rolling Gym */
+  font-weight: bold;
+}
+
 .nav-link:hover {
   color: var(--gym-primary) !important;
 }

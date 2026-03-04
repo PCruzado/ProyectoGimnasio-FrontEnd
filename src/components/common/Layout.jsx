@@ -1,54 +1,57 @@
-import React, { useState } from "react";
-import { Outlet } from "react-router"; // O "react-router" dependiendo de tu versión
+import { useState, useEffect } from "react";
+import { Outlet, useNavigate } from "react-router"; 
 import NavbarGym from "./NavbarGym";
-import FooterGym from "./FooterGym";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
+import FooterGym from "./FooterGym";
 
 const Layout = () => {
   // 1. Estados independientes para cada modal
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const [user, setUser] = useState(null); // Estado global del usuario
+  const navigate = useNavigate();
 
-  // 2. Funciones de control cruzado
-  const handleOpenLogin = () => {
-    setShowRegister(false); // Cerramos el otro por las dudas
-    setShowLogin(true);
-  };
+  // Al montar el componente, verificamos si ya hay una sesión activa
+  useEffect(() => {
+    const loggedUser = JSON.parse(localStorage.getItem("user-rolling-gym"));
+    if (loggedUser) {
+      setUser(loggedUser);
+    }
+  }, []);
 
-  const handleOpenRegister = () => {
-    setShowLogin(false); // Cerramos el otro por las dudas
-    setShowRegister(true);
-  };
-
-  const handleCloseAll = () => {
-    setShowLogin(false);
-    setShowRegister(false);
+  const handleLogout = () => {
+    localStorage.removeItem("user-rolling-gym");
+    setUser(null);
+    navigate("/"); // Redirigimos al inicio al cerrar sesión
   };
 
   return (
     <div className="d-flex flex-column min-vh-100 bg-dark text-light">
-      {/* 3. Le pasamos la función al Navbar que me mostraste */}
-      <NavbarGym onLoginClick={handleOpenLogin} />
+      {/* Pasamos user y handleLogout al Navbar */}
+      <NavbarGym 
+        user={user} 
+        onLoginClick={() => setShowLogin(true)} 
+        onLogout={handleLogout} 
+      />
 
-      {/* Aquí se renderizan las páginas (Home, Nosotros, Detalle) */}
       <main className="flex-grow-1">
         <Outlet />
       </main>
 
       <FooterGym />
 
-      {/* 4. Montamos los modales globales */}
       <LoginModal 
         show={showLogin} 
-        handleClose={handleCloseAll} 
-        onSwitchToRegister={handleOpenRegister} 
+        handleClose={() => setShowLogin(false)} 
+        onSwitchToRegister={() => { setShowLogin(false); setShowRegister(true); }}
+        onSuccess={(userData) => setUser(userData)} // El modal nos avisa cuando hay éxito
       />
-      
+
       <RegisterModal 
         show={showRegister} 
-        handleClose={handleCloseAll} 
-        onSwitchToLogin={handleOpenLogin} 
+        handleClose={() => setShowRegister(false)} 
+        onSwitchToLogin={() => { setShowRegister(false); setShowLogin(true); }}
       />
     </div>
   );

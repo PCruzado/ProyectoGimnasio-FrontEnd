@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
 
@@ -7,7 +7,7 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
     nombre: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
 
@@ -21,7 +21,7 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
   const validateForm = () => {
     const newErrors = {};
     if (!form.nombre.trim()) newErrors.nombre = "El nombre es obligatorio";
-    
+
     if (!form.email) {
       newErrors.email = "El correo es obligatorio";
     } else if (!/\S+@\S+\.\S+/.test(form.email)) {
@@ -49,24 +49,34 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
       setErrors(formErrors);
     } else {
       console.log("Datos de registro para el backend:", form);
-      
+
       Swal.fire({
         title: "¡Cuenta Creada!",
         text: "Ya eres parte de Rolling Gym. Por favor, inicia sesión.",
         icon: "success",
         confirmButtonColor: "#ff4d00",
-        timer: 3000
+        timer: 3000,
       });
 
       // Limpiamos el formulario, cerramos este modal y abrimos el de Login
       setForm({ nombre: "", email: "", password: "", confirmPassword: "" });
-      onSwitchToLogin(); 
+      onSwitchToLogin();
     }
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered backdrop="static" contentClassName="bg-black text-light border border-secondary shadow-lg">
-      <Modal.Header closeButton closeVariant="white" className="border-secondary pb-0">
+    <Modal
+      show={show}
+      onHide={handleClose}
+      centered
+      backdrop="static"
+      contentClassName="bg-black text-light border border-secondary shadow-lg"
+    >
+      <Modal.Header
+        closeButton
+        closeVariant="white"
+        className="border-secondary pb-0"
+      >
         <Modal.Title className="fw-bold fs-4 text-uppercase">
           Crear <span className="text-primary">Cuenta</span>
         </Modal.Title>
@@ -88,7 +98,9 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
               onChange={(e) => setField("nombre", e.target.value)}
               isInvalid={!!errors.nombre}
             />
-            <Form.Control.Feedback type="invalid">{errors.nombre}</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              {errors.nombre}
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="regEmail">
@@ -101,7 +113,9 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
               onChange={(e) => setField("email", e.target.value)}
               isInvalid={!!errors.email}
             />
-            <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              {errors.email}
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="regPassword">
@@ -114,11 +128,15 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
               onChange={(e) => setField("password", e.target.value)}
               isInvalid={!!errors.password}
             />
-            <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              {errors.password}
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-4" controlId="regConfirmPassword">
-            <Form.Label className="fw-semibold">Confirmar Contraseña</Form.Label>
+            <Form.Label className="fw-semibold">
+              Confirmar Contraseña
+            </Form.Label>
             <Form.Control
               type="password"
               placeholder="Repite tu contraseña"
@@ -127,18 +145,27 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
               onChange={(e) => setField("confirmPassword", e.target.value)}
               isInvalid={!!errors.confirmPassword}
             />
-            <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              {errors.confirmPassword}
+            </Form.Control.Feedback>
           </Form.Group>
 
-          <Button variant="primary" type="submit" className="w-100 mb-3 py-2 fw-bold" style={{ borderRadius: "8px" }}>
+          <Button
+            variant="primary"
+            type="submit"
+            className="w-100 mb-3 py-2 fw-bold"
+            style={{ borderRadius: "8px" }}
+          >
             REGISTRARME
           </Button>
 
           <div className="text-center mt-3">
-            <span className="text-secondary small">¿Ya tienes una cuenta? </span>
+            <span className="text-secondary small">
+              ¿Ya tienes una cuenta?{" "}
+            </span>
             {/* ESTE ES EL BOTÓN QUE CAMBIA AL LOGIN */}
-            <span 
-              className="text-primary fw-semibold" 
+            <span
+              className="text-primary fw-semibold"
               style={{ cursor: "pointer", textDecoration: "underline" }}
               onClick={onSwitchToLogin}
             >

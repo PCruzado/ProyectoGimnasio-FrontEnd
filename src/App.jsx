@@ -4,6 +4,7 @@ import PlanDetail from "./components/pages/PlanDetail";
 import Error404 from "./components/pages/Error404";
 import Layout from "./components/common/Layout"; // Para Navbar y Footer constantes
 import AboutUs from "./components/pages/AboutUs"; // Página del equipo
+import Admin from "./components/pages/Admin"; // Panel de administración
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
       {
         path: "detalle-plan/:id",
         element: <PlanDetail />,
+      },
+      {
+        path: "admin",
+        element: <Admin />,
       },
       {
         path: "nosotros",

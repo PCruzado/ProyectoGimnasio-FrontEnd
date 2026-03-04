@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
+import axios from "axios";
 import Swal from "sweetalert2";
 
 const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
   const [form, setForm] = useState({
     nombre: "",
+    telefono: "",
     email: "",
-    password: "",
+    contrasena: "",
     confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
@@ -22,33 +24,64 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
     const newErrors = {};
     if (!form.nombre.trim()) newErrors.nombre = "El nombre es obligatorio";
 
+    if (!form.telefono) {
+      newErrors.telefono = "El teléfono es obligatorio";
+    } else if (!/^\d{10}$/.test(form.telefono)) {
+      newErrors.telefono = "Ingresa un teléfono válido (10 dígitos)";
+    }
+
     if (!form.email) {
       newErrors.email = "El correo es obligatorio";
     } else if (!/\S+@\S+\.\S+/.test(form.email)) {
       newErrors.email = "Ingresa un correo válido";
     }
 
-    if (!form.password) {
-      newErrors.password = "La contraseña es obligatoria";
-    } else if (form.password.length < 6) {
-      newErrors.password = "Debe tener al menos 6 caracteres";
+    if (!form.contrasena) {
+      newErrors.contrasena = "La contraseña es obligatoria";
+    } else if (form.contrasena.length < 6) {
+      newErrors.contrasena = "Debe tener al menos 6 caracteres";
     }
 
-    if (form.password !== form.confirmPassword) {
+    if (form.contrasena !== form.confirmPassword) {
       newErrors.confirmPassword = "Las contraseñas no coinciden";
     }
 
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formErrors = validateForm();
 
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
     } else {
-      console.log("Datos de registro para el backend:", form);
+      try {
+        const response = await axios.post(
+          "http://localhost:4000/api/usuarios/registro",
+          {
+            nombre: form.nombre,
+            apellido: "Garciariaga",
+            telefono: form.telefono,
+            email: form.email,
+            contrasena: form.contrasena,
+            planContratado: null,
+            rol: "usuario",
+          },
+        );
+      } catch(error) {
+
+        const mensajeDelBack = error.response?.data?.mensaje || "Error inesperado";
+        Swal.fire({
+          title: "Error",
+          text: mensajeDelBack,
+          icon: "error",
+          confirmButtonColor: "#ff4d00",
+          timer: 3000,
+        });
+        return;
+      }
+      console.info("Datos de registro para el backend:", form);
 
       Swal.fire({
         title: "¡Cuenta Creada!",
@@ -59,7 +92,13 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
       });
 
       // Limpiamos el formulario, cerramos este modal y abrimos el de Login
-      setForm({ nombre: "", email: "", password: "", confirmPassword: "" });
+      setForm({
+        nombre: "",
+        email: "",
+        telefono: "",
+        contrasena: "",
+        confirmPassword: "",
+      });
       onSwitchToLogin();
     }
   };
@@ -103,6 +142,21 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
             </Form.Control.Feedback>
           </Form.Group>
 
+          <Form.Group className="mb-3" controlId="regTelefono">
+            <Form.Label className="fw-semibold">Teléfono</Form.Label>
+            <Form.Control
+              type="tel"
+              placeholder="Ej: 381 123-4567"
+              className="p-2 bg-dark text-light border-secondary"
+              value={form.telefono}
+              onChange={(e) => setField("telefono", e.target.value)}
+              isInvalid={!!errors.telefono}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.telefono}
+            </Form.Control.Feedback>
+          </Form.Group>
+
           <Form.Group className="mb-3" controlId="regEmail">
             <Form.Label className="fw-semibold">Correo Electrónico</Form.Label>
             <Form.Control
@@ -124,12 +178,12 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
               type="password"
               placeholder="Mínimo 6 caracteres"
               className="p-2 bg-dark text-light border-secondary"
-              value={form.password}
-              onChange={(e) => setField("password", e.target.value)}
-              isInvalid={!!errors.password}
+              value={form.contrasena}
+              onChange={(e) => setField("contrasena", e.target.value)}
+              isInvalid={!!errors.contrasena}
             />
             <Form.Control.Feedback type="invalid">
-              {errors.password}
+              {errors.contrasena}
             </Form.Control.Feedback>
           </Form.Group>
 

@@ -1,8 +1,17 @@
-// src/components/home/Hero.jsx
 import { Container, Button, Row, Col } from "react-bootstrap";
+import { useNavigate } from "react-router"; 
 import "../style/Hero.css";
 
 const Hero = () => {
+  const navigate = useNavigate();
+
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <div className="hero-container d-flex align-items-center text-light">
       <Container>
@@ -17,11 +26,23 @@ const Hero = () => {
                 ambiente de Tucumán.
               </p>
               <div className="d-grid d-md-flex gap-3 mt-4">
-                <Button variant="primary" size="lg" className="btn-hero">
+                <Button 
+                  variant="primary" 
+                  size="lg" 
+                  className="btn-hero fw-bold"
+                  onClick={() => scrollToSection("planes")}
+                >
                   VER PLANES
                 </Button>
-                <Button variant="outline-light" size="lg" className="btn-hero">
-                  Conocenos
+                
+                {/* Botón de Reservas: Ahora redirige a la página de turnos */}
+                <Button 
+                  variant="outline-light" 
+                  size="lg" 
+                  className="btn-hero fw-bold"
+                  onClick={() => navigate("/reservas")}
+                >
+                  RESERVÁ TU CLASE
                 </Button>
               </div>
             </div>

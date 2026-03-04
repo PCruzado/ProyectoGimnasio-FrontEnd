@@ -9,6 +9,7 @@ import ProtectedRoute from "./components/routes/ProtectedRoute";
 import StaffDetail from "./components/pages/StaffDetail";
 import ProductDetail from "./components/pages/ProductDetail";
 import Contact from "./components/pages/Contact";
+import Reservation from "./components/pages/Reservation";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
             <Admin />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "reservas",
+        element: <Reservation />,
       },
       {
         path: "nosotros",

@@ -17,3 +17,21 @@
 .text-primary {
   color: var(--gym-primary) !important;
 }
+
+/* Estilo para las Cards del equipo */
+.hover-card {
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.hover-card:hover {
+  transform: translateY(-10px); /* Efecto de levante */
+  border-color: #ff4d00 !important; /* El naranja de Rolling Gym */
+}
+
+.hover-primary:hover {
+  color: #ff4d00 !important;
+}
+
+.transition-all {
+  transition: all 0.3s ease;
+}

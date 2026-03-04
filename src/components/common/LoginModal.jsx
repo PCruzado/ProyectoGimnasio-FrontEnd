@@ -41,9 +41,10 @@ const LoginModal = ({ show, handleClose, onSwitchToRegister, onSuccess }) => {
     setErrors(formErrors);
   } else {
     try {
+      const API_URL = import.meta.env.VITE_API_URL;
       // 1. Petición POST al backend de usuarios
       const response = await axios.post(
-        "http://localhost:4000/api/usuarios/login", 
+        `${API_URL}/usuarios/login`, 
         {
           email: form.email,
           contrasena: form.password // Enviamos el password del form como 'contrasena'

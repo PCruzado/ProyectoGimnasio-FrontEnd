@@ -57,8 +57,9 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
       setErrors(formErrors);
     } else {
       try {
+        const API_URL = import.meta.env.VITE_API_URL;
         const response = await axios.post(
-          "http://localhost:4000/api/usuarios/registro",
+          `${API_URL}/usuarios/registro`,
           {
             nombre: form.nombre,
             apellido: "Garciariaga",

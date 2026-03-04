@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
+import axios from "axios";
 
 // Agregamos 'onSuccess' a las props para avisarle al Layout
 const LoginModal = ({ show, handleClose, onSwitchToRegister, onSuccess }) => {
@@ -33,44 +34,63 @@ const LoginModal = ({ show, handleClose, onSwitchToRegister, onSuccess }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formErrors = validateForm();
+  e.preventDefault();
+  const formErrors = validateForm();
 
-    if (Object.keys(formErrors).length > 0) {
-      setErrors(formErrors);
-    } else {
-      const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL;
-      const ADMIN_PASS = import.meta.env.VITE_ADMIN_PASSWORD;
-
-      if (form.email === ADMIN_EMAIL && form.password === ADMIN_PASS) {
-        const adminUser = {
-          nombre: "Administrador Rolling",
-          role: "admin",
+  if (Object.keys(formErrors).length > 0) {
+    setErrors(formErrors);
+  } else {
+    try {
+      // 1. Petición POST al backend de usuarios
+      const response = await axios.post(
+        "http://localhost:4000/api/usuarios/login", 
+        {
           email: form.email,
-        };
+          contrasena: form.password // Enviamos el password del form como 'contrasena'
+        }
+      );
 
-        localStorage.setItem("user-rolling-gym", JSON.stringify(adminUser));
+      // 2. El backend nos devuelve: _id, nombre, email, rol y token
+      const loggedUser = response.data;
 
-        // --- CAMBIO CLAVE: Avisamos al Layout para que actualice el Navbar ---
-        onSuccess(adminUser); 
+      // 3. Guardamos los datos en el disco local
+      localStorage.setItem("user-rolling-gym", JSON.stringify(loggedUser));
 
-        handleClose();
+      // 4. Avisamos al Layout para que el Navbar cambie de botón instantáneamente
+      onSuccess(loggedUser); 
 
-        setTimeout(() => {
-          Swal.fire({
-            title: "¡Bienvenido, Admin!",
-            icon: "success",
-            confirmButtonColor: "#ff4d00",
-            timer: 1500,
-            showConfirmButton: false,
-          });
+      handleClose();
+
+      // 5. Pequeño delay para la estética y navegación según rol
+      setTimeout(() => {
+        Swal.fire({
+          title: `¡Bienvenido, ${loggedUser.nombre}!`,
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+
+        // Ojo: En tu modelo es 'administrador', no 'admin'
+        if (loggedUser.rol === "administrador") {
           navigate("/admin");
-        }, 100);
-      } else {
-        Swal.fire("Error", "Credenciales incorrectas", "error");
-      }
+        } else {
+          navigate("/");
+        }
+      }, 100);
+
+    } catch (error) {
+      // Manejo de errores (401: clave mal, 404: no existe, etc.)
+      const mensajeError = error.response?.data?.mensaje || "Error al iniciar sesión";
+      console.error("Error en login:", error);
+      Swal.fire({
+        title: "Error",
+        text: mensajeError,
+        icon: "error",
+        confirmButtonColor: "#ff4d00",
+      });
     }
-  };
+  }
+};
 
   return (
     <Modal 

@@ -1,10 +1,11 @@
 import { Row, Col, Card, Button } from 'react-bootstrap';
+import { creatina, proteina, remeraOversize } from '../assets/productos';
 
 const Products = () => {
   const productos = [
-    { id: 1, nombre: "Proteína Whey 1kg", precio: "35.000", img: "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?q=80&w=400" },
-    { id: 2, nombre: "Creatina Monohidrato", precio: "28.000", img: "https://images.unsplash.com/photo-1579722820308-d74e571900a9?q=80&w=400" },
-    { id: 3, nombre: "Remera Gym Oversize", precio: "12.000", img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=400" }
+    { id: 1, nombre: "Proteína Whey 1kg", precio: "35.000", img: proteina },
+    { id: 2, nombre: "Creatina Monohidrato", precio: "28.000", img: creatina },
+    { id: 3, nombre: "Remera Gym Oversize", precio: "12.000", img: remeraOversize }
   ];
 
   return (

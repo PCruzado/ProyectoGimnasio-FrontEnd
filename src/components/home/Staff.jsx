@@ -1,4 +1,5 @@
 import { Row, Col, Card } from 'react-bootstrap';
+import { staff1, staff2, staff3, staff4 } from '../assets/staff';
 import '../style/staff.css';
 
 const Staff = () => {
@@ -8,25 +9,25 @@ const Staff = () => {
       id: 1,
       nombre: "Franco Díaz",
       especialidad: "Musculación & Powerlifting",
-      imagen: "https://images.unsplash.com/photo-1567013127542-490d757e51fe?q=80&w=500"
+      imagen: staff1
     },
     {
       id: 2,
       nombre: "Lucía Torres",
       especialidad: "Yoga & Pilates",
-      imagen: "https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=500"
+      imagen: staff2
     },
     {
       id: 3,
       nombre: "Marcos Ruiz",
       especialidad: "Crossfit & HIIT",
-      imagen: "https://images.unsplash.com/photo-1541534741688-6078c65b5a33?q=80&w=500"
+      imagen: staff3
     },
     {
       id: 4,
       nombre: "Sofía Luna",
       especialidad: "Zumba & Ritmos",
-      imagen: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=500"
+      imagen: staff4
     }
   ];
 

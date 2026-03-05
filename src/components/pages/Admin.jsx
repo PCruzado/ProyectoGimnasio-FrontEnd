@@ -310,14 +310,17 @@ const Admin = () => {
         <Form onSubmit={handleSubmit}>
           <Modal.Body>
             <Form.Group className="mb-3">
-              <Form.Label>Nombre</Form.Label>
+              <Form.Label>{activeTab === "clases" ? "Nombre de la Clase" : "Nombre del Producto"}</Form.Label>
               <Form.Control
                 type="text"
                 required
                 className="bg-black text-light border-secondary"
-                value={formData.nombreClase || formData.nombre || ""}
+                value={activeTab === "clases" ? (formData.nombreClase || "") : (formData.nombre || "")}
                 onChange={(e) =>
-                  setFormData({ ...formData, nombreClase: e.target.value })
+                  setFormData({ 
+                    ...formData, 
+                    [activeTab === "clases" ? "nombreClase" : "nombre"]: e.target.value 
+                  })
                 }
               />
             </Form.Group>
@@ -378,6 +381,19 @@ const Admin = () => {
                     value={formData.precio || ""}
                     onChange={(e) =>
                       setFormData({ ...formData, precio: e.target.value })
+                    }
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Categoría</Form.Label>
+                  <Form.Control
+                    type="text"
+                    required
+                    className="bg-black text-light border-secondary"
+                    placeholder="Ej: Suplementos, Accesorios"
+                    value={formData.categoria || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, categoria: e.target.value })
                     }
                   />
                 </Form.Group>

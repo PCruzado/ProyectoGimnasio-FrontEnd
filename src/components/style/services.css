@@ -1,10 +1,10 @@
-/* src/style/Services.css */
+
 
 :root {
   --gym-primary: #ff4d00;
   --gym-card: #1e1e1e;
   --gym-text: #ffffff;
-  --gym-desc: #adb5bd; /* Gris claro con alto contraste */
+  --gym-desc: #adb5bd; 
 }
 
 .service-item {
@@ -15,10 +15,10 @@
 
 .service-item:hover {
   background-color: var(--gym-card);
-  transform: translateY(-10px); /* Un efecto más elegante */
+  transform: translateY(-10px); 
 }
 
-/* Forzamos el color de la descripción para que se note */
+
 .service-item p {
   color: var(--gym-desc) !important; 
   line-height: 1.4;
@@ -26,7 +26,7 @@
 }
 
 .service-item:hover p {
-  color: #ffffff !important; /* Resalta al pasar el mouse */
+  color: #ffffff !important;
 }
 
 .icon-box {

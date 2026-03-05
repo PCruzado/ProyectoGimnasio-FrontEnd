@@ -1,9 +1,9 @@
-import { Container, Button } from 'react-bootstrap';
-import { useNavigate, useRouteError } from 'react-router';
+import { Container, Button } from "react-bootstrap";
+import { useNavigate, useRouteError } from "react-router";
 
 const Error404 = () => {
   const navigate = useNavigate();
-  const error = useRouteError(); // Captura el detalle del error si existe
+  const error = useRouteError();
 
   return (
     <Container className="d-flex flex-column align-items-center justify-content-center vh-100 text-center text-light">
@@ -12,10 +12,10 @@ const Error404 = () => {
       <p className="lead mb-5 text-muted">
         La página que estás buscando no existe o fue movida a otro gimnasio.
       </p>
-      <Button 
-        variant="primary" 
-        size="lg" 
-        onClick={() => navigate('/')}
+      <Button
+        variant="primary"
+        size="lg"
+        onClick={() => navigate("/")}
         className="fw-bold px-5"
       >
         VOLVER AL INICIO

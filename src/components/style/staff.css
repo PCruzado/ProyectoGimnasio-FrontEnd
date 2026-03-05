@@ -1,4 +1,3 @@
-/* src/style/Staff.css */
 .staff-card {
   position: relative;
   cursor: pointer;
@@ -7,7 +6,7 @@
 
 .staff-card .img-container {
   position: relative;
-  height: 350px; /* Altura fija para que todas las fotos queden iguales */
+  height: 350px;
   overflow: hidden;
   border-radius: 10px;
 }
@@ -24,12 +23,11 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.2));
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.2));
   opacity: 0.8;
   transition: opacity 0.3s ease;
 }
 
-/* Efecto Senior: Zoom en la imagen al pasar el mouse */
 .staff-card:hover img {
   transform: scale(1.1);
 }
@@ -39,5 +37,5 @@
 }
 
 .text-primary {
-  color: var(--gym-primary) !important; /* Usamos el naranja que definimos */
+  color: var(--gym-primary) !important;
 }

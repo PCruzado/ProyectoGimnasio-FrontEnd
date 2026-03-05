@@ -1,13 +1,13 @@
 import { Row, Col, Card, Button, ListGroup } from 'react-bootstrap';
-import { useNavigate } from 'react-router'; // Importante para la navegación
+import { useNavigate } from 'react-router'; 
 import '../style/Plans.css';
 
 const Plans = () => {
-  const navigate = useNavigate(); // Inicializamos el hook de navegación
+  const navigate = useNavigate();
 
   const planes = [
     {
-      // Cambiamos el ID a string para que coincida con el diccionario de PlanDetail
+      
       id: "musculacion", 
       nombre: "Plan Solo Musculación",
       precio: "15.000",
@@ -50,7 +50,7 @@ const Plans = () => {
                 ))}
               </ListGroup>
               
-              {/* Navegación dinámica al detalle del plan */}
+              
               <Button 
                 variant={plan.destacado ? "primary" : "outline-light"} 
                 size="lg" 

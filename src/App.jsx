@@ -2,17 +2,28 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import Home from "./components/pages/Home";
 import PlanDetail from "./components/pages/PlanDetail";
 import Error404 from "./components/pages/Error404";
+<<<<<<< HEAD
 import Layout from "./components/common/Layout"; // Para Navbar y Footer constantes
 import AboutUs from "./components/pages/AboutUs"; // Página del equipo
+=======
+import Layout from "./components/common/Layout";
+import AboutUs from "./components/pages/AboutUs";
+import Admin from "./components/pages/Admin";
+import ProtectedRoute from "./components/routes/ProtectedRoute";
+import StaffDetail from "./components/pages/StaffDetail";
+import ProductDetail from "./components/pages/ProductDetail";
+import Contact from "./components/pages/Contact";
+import Reservation from "./components/pages/Reservation";
+>>>>>>> dev
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />, // Este componente tiene el Navbar, Footer y el <Outlet />
+    element: <Layout />,
     errorElement: <Error404 />,
     children: [
       {
-        path: "/",
+        index: true,
         element: <Home />,
       },
       {
@@ -20,8 +31,36 @@ const router = createBrowserRouter([
         element: <PlanDetail />,
       },
       {
+        path: "admin",
+        element: (
+          <ProtectedRoute>
+            <Admin />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "reservas",
+        element: <Reservation />,
+      },
+      {
         path: "nosotros",
         element: <AboutUs />,
+      },
+      {
+        path: "contacto",
+        element: <Contact />,
+      },
+      {
+        path: "staff/:id",
+        element: <StaffDetail />,
+      },
+      {
+        path: "producto/:id",
+        element: <ProductDetail />,
+      },
+      {
+        path: "*",
+        element: <Error404 />,
       },
     ],
   },

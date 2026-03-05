@@ -13,9 +13,9 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProducto = async () => {
       try {
-        // Ajustá esta URL según el backend de tus compañeros
+        const API_URL = import.meta.env.VITE_API_URL;
         const response = await axios.get(
-          `http://localhost:4000/api/productos/${id}`,
+          `${API_URL}/api/productos/${id}`,
         );
         setProducto(response.data);
         setLoading(false);

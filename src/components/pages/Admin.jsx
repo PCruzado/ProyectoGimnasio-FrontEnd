@@ -38,21 +38,36 @@ const Admin = () => {
   }, [token]);
 
   const fetchData = async () => {
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+
+    // En lugar de Promise.all, usamos try/catch individuales
     try {
-      const config = { headers: { Authorization: `Bearer ${token}` } };
-      const [resUsers, resClases, resProds] = await Promise.all([
-        axios.get(`${API_URL}/api/usuarios`, config),
-        axios.get(`${API_URL}/api/clases`),
-        axios.get(`${API_URL}/api/productos`),
-      ]);
+      const resUsers = await axios.get(`${API_URL}/api/usuarios`, config);
       setUsuarios(resUsers.data);
-      setClases(resClases.data);
-      setProductos(resProds.data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error cargando datos", error);
-      setLoading(false);
+    } catch (e) {
+      console.error("Error en Usuarios", e);
     }
+
+    try {
+      const resClases = await axios.get(`${API_URL}/api/clases`);
+      setClases(resClases.data);
+    } catch (e) {
+      console.error("Error en Clases", e);
+      Swal.fire(
+        "Aviso",
+        "El servidor de clases está caído temporalmente.",
+        "warning",
+      );
+    }
+
+    try {
+      const resProds = await axios.get(`${API_URL}/api/productos`);
+      setProductos(resProds.data);
+    } catch (e) {
+      console.error("Error en Productos", e);
+    }
+
+    setLoading(false);
   };
 
   const handleOpenModal = (item = null) => {
@@ -103,11 +118,7 @@ const Admin = () => {
           config,
         );
       } else {
-        await axios.post(
-          `${API_URL}/api/${activeTab}`,
-          formData,
-          config,
-        );
+        await axios.post(`${API_URL}/api/${activeTab}`, formData, config);
       }
       setShowModal(false);
       fetchData();

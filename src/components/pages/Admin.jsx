@@ -15,7 +15,6 @@ import {
 import axios from "axios";
 import Swal from "sweetalert2";
 
-// Listas oficiales sincronizadas con tu Staff de la Home
 const DISCIPLINAS = [
   "Yoga",
   "Crossfit",
@@ -326,7 +325,6 @@ const Admin = () => {
           <Modal.Body>
             {activeTab === "clases" ? (
               <>
-                {/* AHORA SÍ: El campo Nombre es un SELECT para Clases */}
                 <Form.Group className="mb-3">
                   <Form.Label>Disciplina (Clase)</Form.Label>
                   <Form.Select
@@ -398,7 +396,6 @@ const Admin = () => {
               </>
             ) : (
               <>
-                {/* Para productos, el nombre sigue siendo texto libre */}
                 <Form.Group className="mb-3">
                   <Form.Label>Nombre del Producto</Form.Label>
                   <Form.Control

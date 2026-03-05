@@ -37,7 +37,7 @@ const ProductDetail = () => {
   }
 
   const handleConsulta = () => {
-    const nroTelefono = "543812222222"; // El número del gym
+    const nroTelefono = "543812222222";
     const mensaje = `Hola Rolling Gym! Me interesa el producto: ${producto.nombre}. ¿Tienen stock disponible?`;
     const url = `https://wa.me/${nroTelefono}?text=${encodeURIComponent(mensaje)}`;
 
@@ -74,7 +74,7 @@ const ProductDetail = () => {
           <h2 className="text-primary fw-bold mb-4">${producto.precio}</h2>
 
           <h5 className="text-secondary">Descripción:</h5>
-          {/* Usamos un condicional para mostrar un mensaje si no hay datos */}
+
           <p className="lead mb-4">
             {producto.descripcion
               ? producto.descripcion
@@ -82,7 +82,6 @@ const ProductDetail = () => {
           </p>
 
           <div className="d-grid gap-2">
-            {/* Botón transformado a consulta */}
             <Button
               variant="success"
               size="lg"

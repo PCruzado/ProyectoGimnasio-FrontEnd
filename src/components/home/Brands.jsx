@@ -13,7 +13,7 @@ const Brands = () => {
     { name: "Adidas", icon: <SiAdidas /> },
     { name: "Reebok", icon: <SiReebok /> },
     { name: "Under Armour", icon: <SiUnderarmour /> },
-    { name: "Puma", icon: <SiPuma /> } // Cambiado aquí también
+    { name: "Puma", icon: <SiPuma /> } 
   ];
 
   return (
@@ -26,7 +26,6 @@ const Brands = () => {
           {brands.map((brand, index) => (
             <Col key={index} xs={4} md={2} className="text-center">
               <div className="brand-icon-wrapper transition-all">
-                {/* Renderizamos el componente del icono directamente */}
                 <span className="display-4 text-secondary brand-icon">
                   {brand.icon}
                 </span>

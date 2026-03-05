@@ -8,7 +8,7 @@ const Products = () => {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // useEffect es el "disparador" que trae los datos al abrir la página
+  
   useEffect(() => {
     const traerProductos = async () => {
       try {
@@ -47,11 +47,11 @@ const Products = () => {
               <Card.Img
                 variant="top"
                 src={p.imagen}
-                // Si la imagen falla, carga esta de respaldo
+               
                 onError={(e) => {
                   e.target.src =
                     "https://placehold.co/400x400/000000/ff4d00?text=Rolling+Gym";
-                  e.target.onerror = null; // Evita bucles infinitos
+                  e.target.onerror = null; 
                 }}
                 style={{
                   height: "220px",

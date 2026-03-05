@@ -5,10 +5,9 @@ import emailjs from "@emailjs/browser";
 import Swal from "sweetalert2";
 
 const PlanDetail = () => {
-  const { id } = useParams(); // Captura 'musculacion', 'clases' o 'full'
+  const { id } = useParams();
   const form = useRef();
 
-  // Diccionario de datos para evitar "hardcoding"
   const infoPlanes = {
     musculacion: {
       titulo: "Plan Solo Musculación",
@@ -32,35 +31,31 @@ const PlanDetail = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // 1. Objeto con los datos exactos. 
-    // AGREGAMOS 'reply_to' o 'to_email' según cómo lo tengas en EmailJS
     const templateParams = {
       user_name: form.current.user_name.value,
-      user_email: form.current.user_email.value, // Asegurate que en el dashboard diga {{user_email}}
+      user_email: form.current.user_email.value,
       user_phone: form.current.user_phone.value,
       plan_type: planActual.titulo,
       plan_price: planActual.precio,
-      to_email: form.current.user_email.value, // Esto ayuda a dirigir el mail si es confirmación
+      to_email: form.current.user_email.value, 
     };
-
-    console.log("Enviando datos:", templateParams); // Debugging para vos
 
     emailjs
       .send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID, // Usá tu variable de entorno aquí
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID, 
         templateParams,
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       )
       .then((response) => {
-        console.log("ÉXITO!", response.status, response.text);
+        console.info("ÉXITO!", response.status, response.text);
         Swal.fire({
           title: "¡Éxito!",
           text: "Revisá tu correo para confirmar",
           icon: "success",
           confirmButtonColor: "#ff4d00"
         });
-        e.target.reset(); // Limpia el form
+        e.target.reset(); 
       })
       .catch((err) => {
         console.error("Error detallado:", err);

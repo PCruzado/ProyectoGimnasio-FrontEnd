@@ -1,14 +1,14 @@
-/* src/style/Hero.css */
+
 .hero-container {
   background: linear-gradient(rgba(18, 18, 18, 0.6), rgba(18, 18, 18, 0.4)), 
               url('../assets/Hero.jpg') no-repeat center center/cover;
-  min-height: 80vh; /* min-height es mejor que height fijo para mobile */
+  min-height: 80vh; 
   width: 100%;
 }
 
 .hero-content {
-  background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro para legibilidad */
-  backdrop-filter: blur(5px); /* Efecto moderno de desenfoque */
+  background-color: rgba(0, 0, 0, 0.6); 
+  backdrop-filter: blur(5px); 
 }
 
 .hero-container h1 {
@@ -18,21 +18,21 @@
 }
 
 .hero-container span {
-  color: var(--gym-primary); /* Resaltamos una palabra clave */
+  color: var(--gym-primary); 
 }
 
 
 
 
-/* Ajustes para Celulares */
+
 @media (max-width: 576px) {
   .hero-container {
     min-height: 60vh;
-    background-attachment: scroll; /* Evita problemas de scroll en iOS */
+    background-attachment: scroll; 
   }
 
   .hero-container h1 {
-    font-size: 2.2rem; /* Título más chico en mobile */
+    font-size: 2.2rem; 
     line-height: 1.1;
   }
 
@@ -41,13 +41,13 @@
   }
 }
 
-/* Estilo para los botones en mobile */
+
 .d-grid .btn-hero {
-  width: 100%; /* Botones a lo ancho en mobile */
+  width: 100%; 
 }
 
 @media (min-width: 768px) {
   .btn-hero {
-    width: auto; /* Botones normales en desktop */
+    width: auto; 
   }
 }

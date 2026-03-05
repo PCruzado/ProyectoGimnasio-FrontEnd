@@ -1,4 +1,4 @@
-import Hero from "../home/Hero"; // Subimos un nivel para entrar a home
+import Hero from "../home/Hero"; 
 import Weather from "../home/Weather";
 import Plans from "../home/Plans";
 import Services from "../home/Services";
@@ -11,16 +11,15 @@ import { Container } from "react-bootstrap";
 const Home = () => {
   return (
     <>
-      {/* 1. El Hero es el que más espacio visual ocupa */}
+      
       <Hero />
 
       <Brands />
 
       <Container id="clima" className="py-5">
-        {/* 2. El widget del clima (revisá que no esté vacío) */}
+       
         <Weather />
 
-        {/* 3. El resto de las secciones */}
         <section id="servicios" className="my-5">
           <h2 className="text-center mb-4">Nuestros Servicios</h2>
           <Services />

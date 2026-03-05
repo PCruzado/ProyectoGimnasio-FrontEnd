@@ -49,7 +49,7 @@ const Weather = () => {
     >
       <Card.Body className="d-flex flex-column flex-md-row align-items-center justify-content-around p-4">
         
-        {/* Ubicación y Descripción */}
+        
         <div className="text-center text-md-start mb-3 mb-md-0">
           <h5 className="mb-1 fw-bold text-primary">
             {weather.name}, {weather.sys.country}
@@ -59,9 +59,9 @@ const Weather = () => {
           </p>
         </div>
         
-        {/* Ícono dinámico y Temperatura */}
+       
         <div className="d-flex align-items-center mb-3 mb-md-0">
-          {/* Contenedor con resplandor para resaltar la nube */}
+         
           <div 
             className="me-3 d-flex align-items-center justify-content-center" 
             style={{ 
@@ -81,7 +81,7 @@ const Weather = () => {
           <h2 className="mb-0 fw-bold display-5">{Math.round(weather.main.temp)}°C</h2>
         </div>
 
-        {/* Humedad y Viento (Oculto en celulares, visible en tablets/desktop) */}
+        
         <div className="d-none d-md-block text-end text-secondary small">
           <p className="mb-2">
             <i className="bi bi-droplet-half text-primary me-2"></i>

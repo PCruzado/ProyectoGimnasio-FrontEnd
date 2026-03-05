@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
   const [form, setForm] = useState({
     nombre: "",
+    apellido: "",
     telefono: "",
     email: "",
     contrasena: "",
@@ -58,21 +59,18 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
     } else {
       try {
         const API_URL = import.meta.env.VITE_API_URL;
-        const response = await axios.post(
-          `${API_URL}/api/usuarios/registro`,
-          {
-            nombre: form.nombre,
-            apellido: "Garciariaga",
-            telefono: form.telefono,
-            email: form.email,
-            contrasena: form.contrasena,
-            planContratado: null,
-            rol: "usuario",
-          },
-        );
-      } catch(error) {
-
-        const mensajeDelBack = error.response?.data?.mensaje || "Error inesperado";
+        const response = await axios.post(`${API_URL}/api/usuarios/registro`, {
+          nombre: form.nombre,
+          apellido: form.apellido,
+          telefono: form.telefono,
+          email: form.email,
+          contrasena: form.contrasena,
+          planContratado: null,
+          rol: "usuario",
+        });
+      } catch (error) {
+        const mensajeDelBack =
+          error.response?.data?.mensaje || "Error inesperado";
         Swal.fire({
           title: "Error",
           text: mensajeDelBack,
@@ -95,6 +93,7 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
       // Limpiamos el formulario, cerramos este modal y abrimos el de Login
       setForm({
         nombre: "",
+        apellido: "",
         email: "",
         telefono: "",
         contrasena: "",
@@ -129,7 +128,7 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
 
         <Form onSubmit={handleSubmit} noValidate>
           <Form.Group className="mb-3" controlId="regNombre">
-            <Form.Label className="fw-semibold">Nombre Completo</Form.Label>
+            <Form.Label className="fw-semibold">Nombre</Form.Label>
             <Form.Control
               type="text"
               placeholder="Ej: Facundo Vera"
@@ -141,6 +140,17 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
             <Form.Control.Feedback type="invalid">
               {errors.nombre}
             </Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="regApellido">
+            <Form.Label className="fw-semibold">Apellido</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Ej: Garcia"
+              className="p-2 bg-dark text-light border-secondary"
+              value={form.apellido}
+              onChange={(e) => setField("apellido", e.target.value)}
+            />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="regTelefono">

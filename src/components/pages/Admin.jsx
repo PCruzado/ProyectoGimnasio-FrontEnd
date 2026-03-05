@@ -15,8 +15,33 @@ import {
 import axios from "axios";
 import Swal from "sweetalert2";
 
+// Listas fijas para mantener la integridad de los datos en Tucumán
+const DISCIPLINAS = [
+  "Yoga",
+  "Crossfit",
+  "Zumba",
+  "Spinning",
+  "Musculación",
+  "Boxeo",
+  "Pilates",
+];
+const STAFF = [
+  "Juan Pérez",
+  "Marta Gómez",
+  "Esteban Quito",
+  "Ana García",
+  "Pedro Picapiedra",
+];
+const CATEGORIAS = [
+  "Suplementos",
+  "Indumentaria",
+  "Accesorios",
+  "Equipamiento",
+];
+
 const Admin = () => {
   const API_URL = import.meta.env.VITE_API_URL;
+
   // Estados de datos
   const [usuarios, setUsuarios] = useState([]);
   const [clases, setClases] = useState([]);
@@ -37,10 +62,10 @@ const Admin = () => {
     if (token) fetchData();
   }, [token]);
 
+  // Carga de datos con manejo de errores individual para evitar el error 500 total
   const fetchData = async () => {
     const config = { headers: { Authorization: `Bearer ${token}` } };
 
-    // En lugar de Promise.all, usamos try/catch individuales
     try {
       const resUsers = await axios.get(`${API_URL}/api/usuarios`, config);
       setUsuarios(resUsers.data);
@@ -53,11 +78,6 @@ const Admin = () => {
       setClases(resClases.data);
     } catch (e) {
       console.error("Error en Clases", e);
-      Swal.fire(
-        "Aviso",
-        "El servidor de clases está caído temporalmente.",
-        "warning",
-      );
     }
 
     try {
@@ -76,11 +96,18 @@ const Admin = () => {
       setFormData(item);
     } else {
       setEditMode(false);
-      // Inicializar según el tab activo
-      if (activeTab === "clases")
+      // Inicialización limpia según el Tab activo
+      if (activeTab === "clases") {
         setFormData({ nombreClase: "", profesor: "", fecha: "", horario: "" });
-      if (activeTab === "productos")
-        setFormData({ nombre: "", precio: "", categoria: "", imagen: "" });
+      } else if (activeTab === "productos") {
+        setFormData({
+          nombre: "",
+          precio: "",
+          categoria: "",
+          imagen: "",
+          descripcion: "",
+        });
+      }
     }
     setShowModal(true);
   };
@@ -88,10 +115,13 @@ const Admin = () => {
   const handleDelete = async (id, endpoint) => {
     const result = await Swal.fire({
       title: "¿Estás seguro?",
+      text: "Esta acción no se puede deshacer",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#ff4d00",
+      cancelButtonColor: "#6c757d",
       confirmButtonText: "Sí, borrar",
+      cancelButtonText: "Cancelar",
     });
 
     if (result.isConfirmed) {
@@ -100,9 +130,9 @@ const Admin = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         fetchData();
-        Swal.fire("Eliminado", "", "success");
+        Swal.fire("Eliminado", "El registro fue borrado con éxito.", "success");
       } catch (error) {
-        Swal.fire("Error", "No se pudo eliminar", "error");
+        Swal.fire("Error", "No se pudo eliminar el elemento.", "error");
       }
     }
   };
@@ -110,6 +140,7 @@ const Admin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const config = { headers: { Authorization: `Bearer ${token}` } };
+
     try {
       if (editMode) {
         await axios.put(
@@ -122,30 +153,35 @@ const Admin = () => {
       }
       setShowModal(false);
       fetchData();
-      Swal.fire("¡Éxito!", "Cambios guardados", "success");
+      Swal.fire(
+        "¡Éxito!",
+        "Los cambios se guardaron correctamente.",
+        "success",
+      );
     } catch (error) {
-      Swal.fire("Error", "Ocurrió un problema", "error");
+      const msg =
+        error.response?.data?.message || "Ocurrió un problema técnico.";
+      Swal.fire("Error", msg, "error");
     }
   };
 
   if (loading)
     return (
-      <Spinner
-        animation="border"
-        variant="primary"
-        className="d-block mx-auto my-5"
-      />
+      <div className="text-center py-5 mt-5">
+        <Spinner animation="border" variant="primary" />
+        <p className="text-light mt-3">Cargando Panel de Control...</p>
+      </div>
     );
 
   return (
     <Container className="py-5 mt-5 text-light">
-      {/* SECCIÓN BIENVENIDA (Requerimiento) */}
+      {/* SECCIÓN BIENVENIDA */}
       <div className="mb-5 p-4 bg-black rounded-4 border border-secondary shadow">
         <h1 className="display-6 fw-bold">
           Hola, <span className="text-primary">{loggedUser?.nombre}</span>!
         </h1>
         <p className="text-secondary mb-0">
-          Gestión de Rolling Gym v1.0.8 | San Miguel de Tucumán
+          Gestión de Rolling Gym v1.0.9 | San Miguel de Tucumán
         </p>
       </div>
 
@@ -156,7 +192,7 @@ const Admin = () => {
         {activeTab !== "usuarios" && (
           <Button
             variant="primary"
-            className="fw-bold"
+            className="fw-bold px-4 shadow"
             onClick={() => handleOpenModal()}
           >
             + NUEVA {activeTab.toUpperCase().slice(0, -1)}
@@ -170,21 +206,30 @@ const Admin = () => {
         className="custom-tabs mb-4"
         justify
       >
-        {/* CRUD CLASES */}
+        {/* PESTAÑA CLASES */}
         <Tab eventKey="clases" title="CLASES">
-          <Table responsive variant="dark" hover className="align-middle mt-3">
+          <Table
+            responsive
+            variant="dark"
+            hover
+            className="align-middle mt-3 border-secondary"
+          >
             <thead>
               <tr>
                 <th>Clase</th>
                 <th>Profesor</th>
-                <th>Fecha/Hora</th>
+                <th>Horario</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
               {clases.map((c) => (
                 <tr key={c._id}>
-                  <td>{c.nombreClase}</td>
+                  <td>
+                    <Badge bg="primary" className="p-2">
+                      {c.nombreClase}
+                    </Badge>
+                  </td>
                   <td>{c.profesor}</td>
                   <td>
                     {c.fecha} - {c.horario}hs
@@ -212,14 +257,18 @@ const Admin = () => {
           </Table>
         </Tab>
 
-        {/* CRUD USUARIOS */}
+        {/* PESTAÑA USUARIOS */}
         <Tab eventKey="usuarios" title="USUARIOS">
-          <Table responsive variant="dark" hover className="align-middle mt-3">
+          <Table
+            responsive
+            variant="dark"
+            hover
+            className="align-middle mt-3 border-secondary"
+          >
             <thead>
               <tr>
                 <th>Nombre</th>
                 <th>Email</th>
-                <th>Teléfono</th>
                 <th>Plan</th>
                 <th>Acciones</th>
               </tr>
@@ -230,10 +279,11 @@ const Admin = () => {
                   <td>
                     {u.nombre} {u.apellido}
                   </td>
-                  <td>{u.email}</td>
-                  <td>{u.telefono}</td>
+                  <td className="text-secondary small">{u.email}</td>
                   <td>
-                    <Badge bg="primary">{u.planContratado}</Badge>
+                    <Badge bg="secondary" className="text-uppercase">
+                      {u.planContratado}
+                    </Badge>
                   </td>
                   <td>
                     <Button
@@ -250,9 +300,14 @@ const Admin = () => {
           </Table>
         </Tab>
 
-        {/* CRUD PRODUCTOS (Optativo) */}
+        {/* PESTAÑA PRODUCTOS */}
         <Tab eventKey="productos" title="PRODUCTOS">
-          <Table responsive variant="dark" hover className="align-middle mt-3">
+          <Table
+            responsive
+            variant="dark"
+            hover
+            className="align-middle mt-3 border-secondary"
+          >
             <thead>
               <tr>
                 <th>Producto</th>
@@ -264,8 +319,8 @@ const Admin = () => {
             <tbody>
               {productos.map((p) => (
                 <tr key={p._id}>
-                  <td>{p.nombre}</td>
-                  <td className="text-primary fw-bold">${p.precio}</td>
+                  <td className="fw-bold">{p.nombre}</td>
+                  <td className="text-primary">${p.precio}</td>
                   <td>{p.categoria}</td>
                   <td>
                     <Button
@@ -291,7 +346,7 @@ const Admin = () => {
         </Tab>
       </Tabs>
 
-      {/* MODAL DINÁMICO PARA CLASES Y PRODUCTOS */}
+      {/* MODAL DINÁMICO */}
       <Modal
         show={showModal}
         onHide={() => setShowModal(false)}
@@ -303,23 +358,25 @@ const Admin = () => {
           closeVariant="white"
           className="border-secondary"
         >
-          <Modal.Title>
-            {editMode ? "Editar" : "Crear"} {activeTab.slice(0, -1)}
+          <Modal.Title className="fw-bold">
+            {editMode ? "EDITAR" : "CREAR"}{" "}
+            {activeTab.toUpperCase().slice(0, -1)}
           </Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleSubmit}>
           <Modal.Body>
             <Form.Group className="mb-3">
-              <Form.Label>{activeTab === "clases" ? "Nombre de la Clase" : "Nombre del Producto"}</Form.Label>
+              <Form.Label>Nombre / Título</Form.Label>
               <Form.Control
                 type="text"
                 required
                 className="bg-black text-light border-secondary"
                 value={activeTab === "clases" ? (formData.nombreClase || "") : (formData.nombre || "")}
                 onChange={(e) =>
-                  setFormData({ 
-                    ...formData, 
-                    [activeTab === "clases" ? "nombreClase" : "nombre"]: e.target.value 
+                  setFormData({
+                    ...formData,
+                    [activeTab === "clases" ? "nombreClase" : "nombre"]:
+                      e.target.value,
                   })
                 }
               />
@@ -329,15 +386,21 @@ const Admin = () => {
               <>
                 <Form.Group className="mb-3">
                   <Form.Label>Profesor</Form.Label>
-                  <Form.Control
-                    type="text"
+                  <Form.Select
                     required
                     className="bg-black text-light border-secondary"
                     value={formData.profesor || ""}
                     onChange={(e) =>
                       setFormData({ ...formData, profesor: e.target.value })
                     }
-                  />
+                  >
+                    <option value="">Seleccionar profesor...</option>
+                    {STAFF.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </Form.Select>
                 </Form.Group>
                 <Row>
                   <Col>
@@ -386,16 +449,21 @@ const Admin = () => {
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Categoría</Form.Label>
-                  <Form.Control
-                    type="text"
+                  <Form.Select
                     required
                     className="bg-black text-light border-secondary"
-                    placeholder="Ej: Suplementos, Accesorios"
                     value={formData.categoria || ""}
                     onChange={(e) =>
                       setFormData({ ...formData, categoria: e.target.value })
                     }
-                  />
+                  >
+                    <option value="">Seleccionar...</option>
+                    {CATEGORIAS.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Imagen URL</Form.Label>
@@ -410,11 +478,10 @@ const Admin = () => {
                   />
                 </Form.Group>
                 <Form.Group className="mb-3">
-                  <Form.Label>Descripción del Producto</Form.Label>
+                  <Form.Label>Descripción</Form.Label>
                   <Form.Control
                     as="textarea"
                     rows={3}
-                    placeholder="Ej: Proteína de suero de leche de alta pureza..."
                     required
                     className="bg-black text-light border-secondary"
                     value={formData.descripcion || ""}
@@ -430,8 +497,8 @@ const Admin = () => {
             <Button variant="outline-light" onClick={() => setShowModal(false)}>
               Cancelar
             </Button>
-            <Button variant="primary" type="submit">
-              Guardar
+            <Button variant="primary" type="submit" className="fw-bold px-4">
+              GUARDAR CAMBIOS
             </Button>
           </Modal.Footer>
         </Form>

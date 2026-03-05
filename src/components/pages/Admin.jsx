@@ -371,7 +371,7 @@ const Admin = () => {
                 type="text"
                 required
                 className="bg-black text-light border-secondary"
-                value={formData.nombreClase || formData.nombre || ""}
+                value={activeTab === "clases" ? (formData.nombreClase || "") : (formData.nombre || "")}
                 onChange={(e) =>
                   setFormData({
                     ...formData,

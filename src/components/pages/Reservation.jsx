@@ -9,6 +9,7 @@ const Reservation = () => {
   
   // Obtenemos el usuario del storage para saber si puede reservar
   const loggedUser = JSON.parse(localStorage.getItem("user-rolling-gym"));
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     fetchClases();
@@ -16,7 +17,7 @@ const Reservation = () => {
 
   const fetchClases = async () => {
     try {
-      const { data } = await axios.get("http://localhost:4000/api/clases");
+      const { data } = await axios.get(`${API_URL}/api/clases`);
       setClases(data);
       setLoading(false);
     } catch (error) {
@@ -38,7 +39,7 @@ const Reservation = () => {
     try {
       // Aquí enviamos la reserva al backend
       // Tus compañeros del backend deben tener el endpoint POST /api/reservas
-      await axios.post("http://localhost:4000/api/reservas", {
+      await axios.post(`${API_URL}/api/reservas`, {
         claseId: clase._id,
         usuarioId: loggedUser._id,
         nombreUsuario: loggedUser.nombre

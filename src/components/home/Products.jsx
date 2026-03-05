@@ -12,7 +12,8 @@ const Products = () => {
   useEffect(() => {
     const traerProductos = async () => {
       try {
-        const { data } = await axios.get("http://localhost:4000/api/productos");
+        const API_URL = import.meta.env.VITE_API_URL;
+        const { data } = await axios.get(`${API_URL}/api/productos`);
         setProductos(data);
         setLoading(false);
       } catch (error) {

@@ -7,13 +7,12 @@ import FooterGym from "./FooterGym";
 import ScrollToTop from "./ScrollToTop";
 
 const Layout = () => {
-  // 1. Estados independientes para cada modal
+  
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-  const [user, setUser] = useState(null); // Estado global del usuario
+  const [user, setUser] = useState(null); 
   const navigate = useNavigate();
 
-  // Al montar el componente, verificamos si ya hay una sesión activa
   useEffect(() => {
     const loggedUser = JSON.parse(localStorage.getItem("user-rolling-gym"));
     if (loggedUser) {
@@ -24,12 +23,11 @@ const Layout = () => {
   const handleLogout = () => {
     localStorage.removeItem("user-rolling-gym");
     setUser(null);
-    navigate("/"); // Redirigimos al inicio al cerrar sesión
+    navigate("/");
   };
 
   return (
     <div className="d-flex flex-column min-vh-100 bg-dark text-light">
-      {/* Pasamos user y handleLogout al Navbar */}
       <ScrollToTop />
       <NavbarGym
         user={user}
@@ -50,7 +48,7 @@ const Layout = () => {
           setShowLogin(false);
           setShowRegister(true);
         }}
-        onSuccess={(userData) => setUser(userData)} // El modal nos avisa cuando hay éxito
+        onSuccess={(userData) => setUser(userData)}
       />
 
       <RegisterModal

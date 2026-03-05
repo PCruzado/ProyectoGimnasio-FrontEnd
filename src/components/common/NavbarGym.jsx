@@ -1,26 +1,30 @@
 import { Navbar, Container, Nav, Button } from "react-bootstrap";
-import { NavLink, Link, useLocation } from "react-router"; 
+import { NavLink, Link, useLocation } from "react-router";
 import "../style/NavbarGym.css";
 
 const NavbarGym = ({ onLoginClick, user, onLogout }) => {
   const location = useLocation();
 
-  // Función para subir al inicio (Scroll to top)
   const handleScrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth" // Hace que el subidón sea suave
+      behavior: "smooth",
     });
   };
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg" sticky="top" className="py-3 shadow-lg">
+    <Navbar
+      bg="dark"
+      variant="dark"
+      expand="lg"
+      sticky="top"
+      className="py-3 shadow-lg"
+    >
       <Container>
-        {/* Logo con subida automática al inicio */}
-        <Navbar.Brand 
-          as={Link} 
-          to="/" 
-          onClick={handleScrollToTop} 
+        <Navbar.Brand
+          as={Link}
+          to="/"
+          onClick={handleScrollToTop}
           className="fw-bold fs-3"
         >
           <span className="text-primary">ROLLING</span>GYM
@@ -29,19 +33,16 @@ const NavbarGym = ({ onLoginClick, user, onLogout }) => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto align-items-center">
-            
-            {/* Inicio: Agregamos 'end' para que no quede activo cuando entras a otras páginas */}
-            <Nav.Link 
-              as={NavLink} 
-              to="/" 
-              end 
-              onClick={handleScrollToTop} 
+            <Nav.Link
+              as={NavLink}
+              to="/"
+              end
+              onClick={handleScrollToTop}
               className="mx-2"
             >
               Inicio
             </Nav.Link>
 
-            {/* Cambiamos href por NavLink para evitar recargas bruscas */}
             <Nav.Link as={NavLink} to="/nosotros" className="mx-2">
               Nosotros
             </Nav.Link>
@@ -50,16 +51,18 @@ const NavbarGym = ({ onLoginClick, user, onLogout }) => {
               Contacto
             </Nav.Link>
 
-            {/* Renderizado Condicional */}
             {user ? (
               <>
-                {/* Corregido: Tu modelo de backend usa 'rol' y 'administrador' */}
                 {user.rol === "administrador" && (
-                  <Nav.Link as={NavLink} to="/admin" className="mx-2 text-warning fw-bold">
+                  <Nav.Link
+                    as={NavLink}
+                    to="/admin"
+                    className="mx-2 text-warning fw-bold"
+                  >
                     ADMIN
                   </Nav.Link>
                 )}
-                
+
                 <span className="text-secondary mx-3 d-none d-lg-inline">
                   Hola, <span className="text-light">{user.nombre}</span>
                 </span>

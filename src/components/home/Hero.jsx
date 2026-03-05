@@ -34,8 +34,6 @@ const Hero = () => {
                 >
                   VER PLANES
                 </Button>
-                
-                {/* Botón de Reservas: Ahora redirige a la página de turnos */}
                 <Button 
                   variant="outline-light" 
                   size="lg" 

@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
-import Swal from 'sweetalert2';
+import { useState } from "react";
+import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
+import Swal from "sweetalert2";
 
 const Contact = () => {
   const [validated, setValidated] = useState(false);
@@ -12,12 +12,11 @@ const Contact = () => {
     if (form.checkValidity() === false) {
       event.stopPropagation();
     } else {
-      // Si todo está bien, simulamos el envío
       Swal.fire({
         title: "¡Mensaje Enviado!",
         text: "Nos pondremos en contacto con vos a la brevedad.",
         icon: "success",
-        confirmButtonColor: "#ff4d00"
+        confirmButtonColor: "#ff4d00",
       });
       form.reset();
       setValidated(false);
@@ -33,13 +32,15 @@ const Contact = () => {
         <Col md={8} lg={6}>
           <Card className="bg-black border-secondary shadow-lg p-4">
             <Card.Body>
-              <h2 className="text-center fw-bold text-primary mb-4 text-uppercase">Contacto</h2>
+              <h2 className="text-center fw-bold text-primary mb-4 text-uppercase">
+                Contacto
+              </h2>
               <p className="text-center text-secondary mb-5">
-                ¿Tenés alguna duda sobre nuestros planes o instalaciones? Escribinos.
+                ¿Tenés alguna duda sobre nuestros planes o instalaciones?
+                Escribinos.
               </p>
 
               <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                {/* Nombre Completo */}
                 <Form.Group className="mb-3" controlId="formNombre">
                   <Form.Label>Nombre y Apellido</Form.Label>
                   <Form.Control
@@ -53,7 +54,6 @@ const Contact = () => {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                {/* Email */}
                 <Form.Group className="mb-3" controlId="formEmail">
                   <Form.Label>Correo Electrónico</Form.Label>
                   <Form.Control
@@ -67,10 +67,12 @@ const Contact = () => {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                {/* Asunto */}
                 <Form.Group className="mb-3" controlId="formAsunto">
                   <Form.Label>Asunto</Form.Label>
-                  <Form.Select required className="bg-dark text-light border-secondary">
+                  <Form.Select
+                    required
+                    className="bg-dark text-light border-secondary"
+                  >
                     <option value="">Seleccioná una opción...</option>
                     <option value="planes">Consulta sobre Planes</option>
                     <option value="clases">Horarios de Clases</option>
@@ -81,7 +83,6 @@ const Contact = () => {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                {/* Mensaje */}
                 <Form.Group className="mb-4" controlId="formMensaje">
                   <Form.Label>Tu Mensaje</Form.Label>
                   <Form.Control
@@ -96,7 +97,11 @@ const Contact = () => {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                <Button variant="primary" type="submit" className="w-100 fw-bold py-3">
+                <Button
+                  variant="primary"
+                  type="submit"
+                  className="w-100 fw-bold py-3"
+                >
                   ENVIAR MENSAJE
                 </Button>
               </Form>
@@ -105,7 +110,6 @@ const Contact = () => {
         </Col>
       </Row>
 
-      {/* Sección Extra de Datos (Ubicación/Teléfono) - Requerimiento Footer/Contacto */}
       <Row className="mt-5 text-center">
         <Col md={4}>
           <i className="bi bi-geo-alt text-primary fs-2"></i>

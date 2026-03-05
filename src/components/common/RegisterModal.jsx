@@ -92,7 +92,7 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
         timer: 3000,
       });
 
-      // Limpiamos el formulario, cerramos este modal y abrimos el de Login
+      
       setForm({
         nombre: "",
         apellido: "",
@@ -234,7 +234,7 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
             <span className="text-secondary small">
               ¿Ya tienes una cuenta?{" "}
             </span>
-            {/* ESTE ES EL BOTÓN QUE CAMBIA AL LOGIN */}
+           
             <span
               className="text-primary fw-semibold"
               style={{ cursor: "pointer", textDecoration: "underline" }}

@@ -1,6 +1,6 @@
 .navbar {
   background-color: rgba(18, 18, 18, 0.95) !important;
-  backdrop-filter: blur(10px); /* Efecto Glassmorphism */
+  backdrop-filter: blur(10px); 
 }
 
 .nav-link {
@@ -11,7 +11,7 @@
 }
 
 .nav-link.active {
-  color: #ff4d00 !important; /* El naranja de Rolling Gym */
+  color: #ff4d00 !important; 
   font-weight: bold;
 }
 
@@ -23,14 +23,14 @@
   color: var(--gym-primary) !important;
 }
 
-/* Estilo para las Cards del equipo */
+
 .hover-card {
   transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
 .hover-card:hover {
-  transform: translateY(-10px); /* Efecto de levante */
-  border-color: #ff4d00 !important; /* El naranja de Rolling Gym */
+  transform: translateY(-10px); 
+  border-color: #ff4d00 !important; 
 }
 
 .hover-primary:hover {

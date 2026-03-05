@@ -1,12 +1,46 @@
 import { useState, useEffect } from "react";
-import { Container, Row, Col, Table, Button, Tabs, Tab, Badge, Modal, Form, Spinner } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Table,
+  Button,
+  Tabs,
+  Tab,
+  Badge,
+  Modal,
+  Form,
+  Spinner,
+} from "react-bootstrap";
 import axios from "axios";
 import Swal from "sweetalert2";
 
 // Listas oficiales sincronizadas con tu Staff de la Home
-const DISCIPLINAS = ["Yoga", "Crossfit", "Zumba", "Spinning", "Musculación", "Boxeo", "Pilates"];
-const STAFF = ["Juan Pérez", "Marta Gómez", "Esteban Quito", "Ana García", "Pedro Picapiedra"];
-const CATEGORIAS = ["Suplementos", "Indumentaria", "Accesorios", "Equipamiento"];
+const DISCIPLINAS = [
+  "Yoga",
+  "Crossfit",
+  "Zumba",
+  "Spinning",
+  "Musculación",
+  "Boxeo",
+  "Powerlifting",
+  "HIIT",
+  "Ritmo",
+  "Pilates",
+];
+const STAFF = [
+  "Franco Díaz",
+  "Lucía Torres",
+  "Marcos Ruiz",
+  "Sofía Luna",
+  "Pedro Picapiedra",
+];
+const CATEGORIAS = [
+  "Suplementos",
+  "Indumentaria",
+  "Accesorios",
+  "Equipamiento",
+];
 
 const Admin = () => {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -22,22 +56,30 @@ const Admin = () => {
   const loggedUser = JSON.parse(localStorage.getItem("user-rolling-gym"));
   const token = loggedUser?.token;
 
-  useEffect(() => { if (token) fetchData(); }, [token]);
+  useEffect(() => {
+    if (token) fetchData();
+  }, [token]);
 
   const fetchData = async () => {
     const config = { headers: { Authorization: `Bearer ${token}` } };
     try {
       const resUsers = await axios.get(`${API_URL}/api/usuarios`, config);
       setUsuarios(resUsers.data);
-    } catch (e) { console.error("Error usuarios", e); }
+    } catch (e) {
+      console.error("Error usuarios", e);
+    }
     try {
       const resClases = await axios.get(`${API_URL}/api/clases`);
       setClases(resClases.data);
-    } catch (e) { console.error("Error clases", e); }
+    } catch (e) {
+      console.error("Error clases", e);
+    }
     try {
       const resProds = await axios.get(`${API_URL}/api/productos`);
       setProductos(resProds.data);
-    } catch (e) { console.error("Error productos", e); }
+    } catch (e) {
+      console.error("Error productos", e);
+    }
     setLoading(false);
   };
 
@@ -47,9 +89,16 @@ const Admin = () => {
       setFormData(item);
     } else {
       setEditMode(false);
-      setFormData(activeTab === "clases" 
-        ? { nombreClase: "", profesor: "", fecha: "", horario: "" } 
-        : { nombre: "", precio: "", categoria: "", imagen: "", descripcion: "" }
+      setFormData(
+        activeTab === "clases"
+          ? { nombreClase: "", profesor: "", fecha: "", horario: "" }
+          : {
+              nombre: "",
+              precio: "",
+              categoria: "",
+              imagen: "",
+              descripcion: "",
+            },
       );
     }
     setShowModal(true);
@@ -61,14 +110,18 @@ const Admin = () => {
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#ff4d00",
-      confirmButtonText: "Sí, borrar"
+      confirmButtonText: "Sí, borrar",
     });
     if (result.isConfirmed) {
       try {
-        await axios.delete(`${API_URL}/api/${endpoint}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+        await axios.delete(`${API_URL}/api/${endpoint}/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         fetchData();
         Swal.fire("Eliminado", "", "success");
-      } catch (error) { Swal.fire("Error", "No se pudo eliminar", "error"); }
+      } catch (error) {
+        Swal.fire("Error", "No se pudo eliminar", "error");
+      }
     }
   };
 
@@ -77,48 +130,100 @@ const Admin = () => {
     const config = { headers: { Authorization: `Bearer ${token}` } };
     try {
       if (editMode) {
-        await axios.put(`${API_URL}/api/${activeTab}/${formData._id}`, formData, config);
+        await axios.put(
+          `${API_URL}/api/${activeTab}/${formData._id}`,
+          formData,
+          config,
+        );
       } else {
         await axios.post(`${API_URL}/api/${activeTab}`, formData, config);
       }
       setShowModal(false);
       fetchData();
       Swal.fire("Éxito", "Cambios guardados", "success");
-    } catch (error) { Swal.fire("Error", "Problema al guardar", "error"); }
+    } catch (error) {
+      Swal.fire("Error", "Problema al guardar", "error");
+    }
   };
 
-  if (loading) return <Spinner animation="border" variant="primary" className="d-block mx-auto my-5" />;
+  if (loading)
+    return (
+      <Spinner
+        animation="border"
+        variant="primary"
+        className="d-block mx-auto my-5"
+      />
+    );
 
   return (
     <Container className="py-5 mt-5 text-light">
       <div className="mb-5 p-4 bg-black rounded-4 border border-secondary shadow">
-        <h1 className="display-6 fw-bold">Hola, <span className="text-primary">{loggedUser?.nombre}</span>!</h1>
-        <p className="text-secondary mb-0">Gestión de Rolling Gym v1.1.1 | San Miguel de Tucumán</p>
+        <h1 className="display-6 fw-bold">
+          Hola, <span className="text-primary">{loggedUser?.nombre}</span>!
+        </h1>
+        <p className="text-secondary mb-0">
+          Gestión de Rolling Gym v1.1.1 | San Miguel de Tucumán
+        </p>
       </div>
 
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold text-uppercase m-0">Panel <span className="text-primary">Admin</span></h2>
+        <h2 className="fw-bold text-uppercase m-0">
+          Panel <span className="text-primary">Admin</span>
+        </h2>
         {activeTab !== "usuarios" && (
-          <Button variant="primary" className="fw-bold" onClick={() => handleOpenModal()}>
+          <Button
+            variant="primary"
+            className="fw-bold"
+            onClick={() => handleOpenModal()}
+          >
             + NUEVA {activeTab.toUpperCase().slice(0, -1)}
           </Button>
         )}
       </div>
 
-      <Tabs activeKey={activeTab} onSelect={(k) => setActiveTab(k)} className="mb-4" justify>
+      <Tabs
+        activeKey={activeTab}
+        onSelect={(k) => setActiveTab(k)}
+        className="mb-4"
+        justify
+      >
         {/* Pestaña Clases */}
         <Tab eventKey="clases" title="CLASES">
           <Table responsive variant="dark" hover className="mt-3">
-            <thead><tr><th>Clase</th><th>Profesor</th><th>Horario</th><th>Acciones</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Clase</th>
+                <th>Profesor</th>
+                <th>Horario</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
             <tbody>
               {clases.map((c) => (
                 <tr key={c._id}>
-                  <td><Badge bg="primary">{c.nombreClase}</Badge></td>
-                  <td>{c.profesor}</td>
-                  <td>{c.fecha} - {c.horario}hs</td>
                   <td>
-                    <Button variant="outline-warning" size="sm" className="me-2" onClick={() => handleOpenModal(c)}><i className="bi bi-pencil"></i></Button>
-                    <Button variant="outline-danger" size="sm" onClick={() => handleDelete(c._id, "clases")}><i className="bi bi-trash"></i></Button>
+                    <Badge bg="primary">{c.nombreClase}</Badge>
+                  </td>
+                  <td>{c.profesor}</td>
+                  <td>
+                    {c.fecha} - {c.horario}hs
+                  </td>
+                  <td>
+                    <Button
+                      variant="outline-warning"
+                      size="sm"
+                      className="me-2"
+                      onClick={() => handleOpenModal(c)}
+                    >
+                      <i className="bi bi-pencil"></i>
+                    </Button>
+                    <Button
+                      variant="outline-danger"
+                      size="sm"
+                      onClick={() => handleDelete(c._id, "clases")}
+                    >
+                      <i className="bi bi-trash"></i>
+                    </Button>
                   </td>
                 </tr>
               ))}
@@ -128,11 +233,34 @@ const Admin = () => {
         {/* Pestaña Usuarios */}
         <Tab eventKey="usuarios" title="USUARIOS">
           <Table responsive variant="dark" hover className="mt-3">
-            <thead><tr><th>Nombre</th><th>Email</th><th>Plan</th><th>Acciones</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Plan</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
             <tbody>
               {usuarios.map((u) => (
-                <tr key={u._id}><td>{u.nombre} {u.apellido}</td><td>{u.email}</td><td><Badge bg="secondary">{u.planContratado}</Badge></td>
-                <td><Button variant="outline-danger" size="sm" onClick={() => handleDelete(u._id, "usuarios")}><i className="bi bi-trash"></i></Button></td></tr>
+                <tr key={u._id}>
+                  <td>
+                    {u.nombre} {u.apellido}
+                  </td>
+                  <td>{u.email}</td>
+                  <td>
+                    <Badge bg="secondary">{u.planContratado}</Badge>
+                  </td>
+                  <td>
+                    <Button
+                      variant="outline-danger"
+                      size="sm"
+                      onClick={() => handleDelete(u._id, "usuarios")}
+                    >
+                      <i className="bi bi-trash"></i>
+                    </Button>
+                  </td>
+                </tr>
               ))}
             </tbody>
           </Table>
@@ -140,21 +268,59 @@ const Admin = () => {
         {/* Pestaña Productos */}
         <Tab eventKey="productos" title="PRODUCTOS">
           <Table responsive variant="dark" hover className="mt-3">
-            <thead><tr><th>Producto</th><th>Precio</th><th>Categoría</th><th>Acciones</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Categoría</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
             <tbody>
               {productos.map((p) => (
-                <tr key={p._id}><td>{p.nombre}</td><td className="text-primary">${p.precio}</td><td>{p.categoria}</td>
-                <td><Button variant="outline-warning" size="sm" className="me-2" onClick={() => handleOpenModal(p)}><i className="bi bi-pencil"></i></Button>
-                <Button variant="outline-danger" size="sm" onClick={() => handleDelete(p._id, "productos")}><i className="bi bi-trash"></i></Button></td></tr>
+                <tr key={p._id}>
+                  <td>{p.nombre}</td>
+                  <td className="text-primary">${p.precio}</td>
+                  <td>{p.categoria}</td>
+                  <td>
+                    <Button
+                      variant="outline-warning"
+                      size="sm"
+                      className="me-2"
+                      onClick={() => handleOpenModal(p)}
+                    >
+                      <i className="bi bi-pencil"></i>
+                    </Button>
+                    <Button
+                      variant="outline-danger"
+                      size="sm"
+                      onClick={() => handleDelete(p._id, "productos")}
+                    >
+                      <i className="bi bi-trash"></i>
+                    </Button>
+                  </td>
+                </tr>
               ))}
             </tbody>
           </Table>
         </Tab>
       </Tabs>
 
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered contentClassName="bg-dark text-light border-secondary">
-        <Modal.Header closeButton closeVariant="white" className="border-secondary">
-          <Modal.Title>{editMode ? "EDITAR" : "CREAR"} {activeTab.toUpperCase().slice(0, -1)}</Modal.Title>
+      <Modal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        centered
+        contentClassName="bg-dark text-light border-secondary"
+      >
+        <Modal.Header
+          closeButton
+          closeVariant="white"
+          className="border-secondary"
+        >
+          <Modal.Title>
+            {editMode ? "EDITAR" : "CREAR"}{" "}
+            {activeTab.toUpperCase().slice(0, -1)}
+          </Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleSubmit}>
           <Modal.Body>
@@ -163,19 +329,39 @@ const Admin = () => {
                 {/* AHORA SÍ: El campo Nombre es un SELECT para Clases */}
                 <Form.Group className="mb-3">
                   <Form.Label>Disciplina (Clase)</Form.Label>
-                  <Form.Select required className="bg-black text-light border-secondary" value={formData.nombreClase || ""}
-                    onChange={(e) => setFormData({ ...formData, nombreClase: e.target.value })}>
+                  <Form.Select
+                    required
+                    className="bg-black text-light border-secondary"
+                    value={formData.nombreClase || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, nombreClase: e.target.value })
+                    }
+                  >
                     <option value="">Seleccioná una clase...</option>
-                    {DISCIPLINAS.map(d => <option key={d} value={d}>{d}</option>)}
+                    {DISCIPLINAS.map((d) => (
+                      <option key={d} value={d}>
+                        {d}
+                      </option>
+                    ))}
                   </Form.Select>
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                   <Form.Label>Profesor</Form.Label>
-                  <Form.Select required className="bg-black text-light border-secondary" value={formData.profesor || ""}
-                    onChange={(e) => setFormData({ ...formData, profesor: e.target.value })}>
+                  <Form.Select
+                    required
+                    className="bg-black text-light border-secondary"
+                    value={formData.profesor || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, profesor: e.target.value })
+                    }
+                  >
                     <option value="">Seleccioná un profesor...</option>
-                    {STAFF.map(s => <option key={s} value={s}>{s}</option>)}
+                    {STAFF.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
                   </Form.Select>
                 </Form.Group>
 
@@ -183,15 +369,29 @@ const Admin = () => {
                   <Col>
                     <Form.Group className="mb-3">
                       <Form.Label>Fecha</Form.Label>
-                      <Form.Control type="date" required className="bg-black text-light border-secondary" value={formData.fecha || ""} 
-                        onChange={(e) => setFormData({ ...formData, fecha: e.target.value })} />
+                      <Form.Control
+                        type="date"
+                        required
+                        className="bg-black text-light border-secondary"
+                        value={formData.fecha || ""}
+                        onChange={(e) =>
+                          setFormData({ ...formData, fecha: e.target.value })
+                        }
+                      />
                     </Form.Group>
                   </Col>
                   <Col>
                     <Form.Group className="mb-3">
                       <Form.Label>Hora</Form.Label>
-                      <Form.Control type="time" required className="bg-black text-light border-secondary" value={formData.horario || ""} 
-                        onChange={(e) => setFormData({ ...formData, horario: e.target.value })} />
+                      <Form.Control
+                        type="time"
+                        required
+                        className="bg-black text-light border-secondary"
+                        value={formData.horario || ""}
+                        onChange={(e) =>
+                          setFormData({ ...formData, horario: e.target.value })
+                        }
+                      />
                     </Form.Group>
                   </Col>
                 </Row>
@@ -201,42 +401,85 @@ const Admin = () => {
                 {/* Para productos, el nombre sigue siendo texto libre */}
                 <Form.Group className="mb-3">
                   <Form.Label>Nombre del Producto</Form.Label>
-                  <Form.Control type="text" required className="bg-black text-light border-secondary" value={formData.nombre || ""} 
-                    onChange={(e) => setFormData({ ...formData, nombre: e.target.value })} />
+                  <Form.Control
+                    type="text"
+                    required
+                    className="bg-black text-light border-secondary"
+                    value={formData.nombre || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, nombre: e.target.value })
+                    }
+                  />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                   <Form.Label>Precio</Form.Label>
-                  <Form.Control type="number" required className="bg-black text-light border-secondary" value={formData.precio || ""} 
-                    onChange={(e) => setFormData({ ...formData, precio: e.target.value })} />
+                  <Form.Control
+                    type="number"
+                    required
+                    className="bg-black text-light border-secondary"
+                    value={formData.precio || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, precio: e.target.value })
+                    }
+                  />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                   <Form.Label>Categoría</Form.Label>
-                  <Form.Select required className="bg-black text-light border-secondary" value={formData.categoria || ""} 
-                    onChange={(e) => setFormData({ ...formData, categoria: e.target.value })}>
+                  <Form.Select
+                    required
+                    className="bg-black text-light border-secondary"
+                    value={formData.categoria || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, categoria: e.target.value })
+                    }
+                  >
                     <option value="">Seleccionar...</option>
-                    {CATEGORIAS.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                    {CATEGORIAS.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
                   </Form.Select>
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                   <Form.Label>Imagen URL</Form.Label>
-                  <Form.Control type="text" required className="bg-black text-light border-secondary" value={formData.imagen || ""} 
-                    onChange={(e) => setFormData({ ...formData, imagen: e.target.value })} />
+                  <Form.Control
+                    type="text"
+                    required
+                    className="bg-black text-light border-secondary"
+                    value={formData.imagen || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, imagen: e.target.value })
+                    }
+                  />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                   <Form.Label>Descripción</Form.Label>
-                  <Form.Control as="textarea" rows={3} required className="bg-black text-light border-secondary" value={formData.descripcion || ""} 
-                    onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })} />
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    required
+                    className="bg-black text-light border-secondary"
+                    value={formData.descripcion || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, descripcion: e.target.value })
+                    }
+                  />
                 </Form.Group>
               </>
             )}
           </Modal.Body>
           <Modal.Footer className="border-secondary">
-            <Button variant="outline-light" onClick={() => setShowModal(false)}>Cancelar</Button>
-            <Button variant="primary" type="submit" className="fw-bold px-4">GUARDAR CAMBIOS</Button>
+            <Button variant="outline-light" onClick={() => setShowModal(false)}>
+              Cancelar
+            </Button>
+            <Button variant="primary" type="submit" className="fw-bold px-4">
+              GUARDAR CAMBIOS
+            </Button>
           </Modal.Footer>
         </Form>
       </Modal>

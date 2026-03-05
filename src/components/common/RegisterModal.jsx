@@ -150,7 +150,11 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
               className="p-2 bg-dark text-light border-secondary"
               value={form.apellido}
               onChange={(e) => setField("apellido", e.target.value)}
+              isInvalid={!!errors.apellido}
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.apellido}
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="regTelefono">

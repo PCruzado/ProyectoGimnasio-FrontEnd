@@ -393,6 +393,20 @@ const Admin = () => {
                     }
                   />
                 </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Descripción del Producto</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    placeholder="Ej: Proteína de suero de leche de alta pureza..."
+                    required
+                    className="bg-black text-light border-secondary"
+                    value={formData.descripcion || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, descripcion: e.target.value })
+                    }
+                  />
+                </Form.Group>
               </>
             )}
           </Modal.Body>

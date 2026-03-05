@@ -14,9 +14,7 @@ const ProductDetail = () => {
     const fetchProducto = async () => {
       try {
         const API_URL = import.meta.env.VITE_API_URL;
-        const response = await axios.get(
-          `${API_URL}/api/productos/${id}`,
-        );
+        const response = await axios.get(`${API_URL}/api/productos/${id}`);
         setProducto(response.data);
         setLoading(false);
       } catch (error) {
@@ -42,7 +40,7 @@ const ProductDetail = () => {
     const nroTelefono = "543812222222"; // El número del gym
     const mensaje = `Hola Rolling Gym! Me interesa el producto: ${producto.nombre}. ¿Tienen stock disponible?`;
     const url = `https://wa.me/${nroTelefono}?text=${encodeURIComponent(mensaje)}`;
-    
+
     window.open(url, "_blank");
   };
 
@@ -76,22 +74,27 @@ const ProductDetail = () => {
           <h2 className="text-primary fw-bold mb-4">${producto.precio}</h2>
 
           <h5 className="text-secondary">Descripción:</h5>
-          <p className="lead mb-4">{producto.descripcion}</p>
+          {/* Usamos un condicional para mostrar un mensaje si no hay datos */}
+          <p className="lead mb-4">
+            {producto.descripcion
+              ? producto.descripcion
+              : "No hay una descripción detallada para este suplemento."}
+          </p>
 
           <div className="d-grid gap-2">
             {/* Botón transformado a consulta */}
-            <Button 
-              variant="success" 
-              size="lg" 
+            <Button
+              variant="success"
+              size="lg"
               className="fw-bold py-3 border-0 shadow"
               style={{ backgroundColor: "#25D366" }}
               onClick={handleConsulta}
             >
               <i className="bi bi-whatsapp me-2"></i> CONSULTAR STOCK
             </Button>
-            
-            <Button 
-              variant="outline-primary" 
+
+            <Button
+              variant="outline-primary"
               onClick={() => navigate("/contacto")}
               className="fw-bold"
             >
@@ -99,7 +102,8 @@ const ProductDetail = () => {
             </Button>
 
             <p className="text-center text-secondary small mt-2">
-              <i className="bi bi-truck me-2"></i> Retiro inmediato en Gral. Paz 576
+              <i className="bi bi-truck me-2"></i> Retiro inmediato en Gral. Paz
+              576
             </p>
           </div>
         </Col>

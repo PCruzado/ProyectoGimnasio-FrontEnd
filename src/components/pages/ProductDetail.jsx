@@ -38,6 +38,14 @@ const ProductDetail = () => {
     );
   }
 
+  const handleConsulta = () => {
+    const nroTelefono = "543812222222"; // El número del gym
+    const mensaje = `Hola Rolling Gym! Me interesa el producto: ${producto.nombre}. ¿Tienen stock disponible?`;
+    const url = `https://wa.me/${nroTelefono}?text=${encodeURIComponent(mensaje)}`;
+    
+    window.open(url, "_blank");
+  };
+
   return (
     <Container className="py-5 mt-5 text-light">
       <Button
@@ -71,12 +79,27 @@ const ProductDetail = () => {
           <p className="lead mb-4">{producto.descripcion}</p>
 
           <div className="d-grid gap-2">
-            <Button variant="primary" size="lg" className="fw-bold py-3">
-              AGREGAR AL CARRITO
+            {/* Botón transformado a consulta */}
+            <Button 
+              variant="success" 
+              size="lg" 
+              className="fw-bold py-3 border-0 shadow"
+              style={{ backgroundColor: "#25D366" }}
+              onClick={handleConsulta}
+            >
+              <i className="bi bi-whatsapp me-2"></i> CONSULTAR STOCK
             </Button>
+            
+            <Button 
+              variant="outline-primary" 
+              onClick={() => navigate("/contacto")}
+              className="fw-bold"
+            >
+              MÁS INFORMACIÓN
+            </Button>
+
             <p className="text-center text-secondary small mt-2">
-              <i className="bi bi-truck me-2"></i> Envío gratis a todo San
-              Miguel de Tucumán
+              <i className="bi bi-truck me-2"></i> Retiro inmediato en Gral. Paz 576
             </p>
           </div>
         </Col>

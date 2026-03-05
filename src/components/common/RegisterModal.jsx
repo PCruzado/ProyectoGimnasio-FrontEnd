@@ -25,6 +25,8 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
     const newErrors = {};
     if (!form.nombre.trim()) newErrors.nombre = "El nombre es obligatorio";
 
+    if (!form.apellido.trim()) newErrors.apellido = "El apellido es obligatorio";
+
     if (!form.telefono) {
       newErrors.telefono = "El teléfono es obligatorio";
     } else if (!/^\d{10}$/.test(form.telefono)) {

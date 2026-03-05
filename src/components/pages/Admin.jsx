@@ -16,6 +16,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 const Admin = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   // Estados de datos
   const [usuarios, setUsuarios] = useState([]);
   const [clases, setClases] = useState([]);
@@ -40,9 +41,9 @@ const Admin = () => {
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
       const [resUsers, resClases, resProds] = await Promise.all([
-        axios.get("http://localhost:4000/api/usuarios", config),
-        axios.get("http://localhost:4000/api/clases"),
-        axios.get("http://localhost:4000/api/productos"),
+        axios.get(`${API_URL}/api/usuarios`, config),
+        axios.get(`${API_URL}/api/clases`),
+        axios.get(`${API_URL}/api/productos`),
       ]);
       setUsuarios(resUsers.data);
       setClases(resClases.data);
@@ -80,7 +81,7 @@ const Admin = () => {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:4000/api/${endpoint}/${id}`, {
+        await axios.delete(`${API_URL}/api/${endpoint}/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         fetchData();
@@ -97,13 +98,13 @@ const Admin = () => {
     try {
       if (editMode) {
         await axios.put(
-          `http://localhost:4000/api/${activeTab}/${formData._id}`,
+          `${API_URL}/api/${activeTab}/${formData._id}`,
           formData,
           config,
         );
       } else {
         await axios.post(
-          `http://localhost:4000/api/${activeTab}`,
+          `${API_URL}/api/${activeTab}`,
           formData,
           config,
         );

@@ -63,7 +63,7 @@ const Admin = () => {
       setEditMode(false);
       // Inicializar según el tab activo
       if (activeTab === "clases")
-        setFormData({ nombre: "", profesor: "", fecha: "", hora: "" });
+        setFormData({ nombreClase: "", profesor: "", fecha: "", horario: "" });
       if (activeTab === "productos")
         setFormData({ nombre: "", precio: "", categoria: "", imagen: "" });
     }
@@ -173,10 +173,10 @@ const Admin = () => {
             <tbody>
               {clases.map((c) => (
                 <tr key={c._id}>
-                  <td>{c.nombre}</td>
+                  <td>{c.nombreClase}</td>
                   <td>{c.profesor}</td>
                   <td>
-                    {c.fecha} - {c.hora}hs
+                    {c.fecha} - {c.horario}hs
                   </td>
                   <td>
                     <Button
@@ -304,9 +304,9 @@ const Admin = () => {
                 type="text"
                 required
                 className="bg-black text-light border-secondary"
-                value={formData.nombre || ""}
+                value={formData.nombreClase || formData.nombre || ""}
                 onChange={(e) =>
-                  setFormData({ ...formData, nombre: e.target.value })
+                  setFormData({ ...formData, nombreClase: e.target.value })
                 }
               />
             </Form.Group>
@@ -347,9 +347,9 @@ const Admin = () => {
                         type="time"
                         required
                         className="bg-black text-light border-secondary"
-                        value={formData.hora || ""}
+                        value={formData.horario || formData.hora || ""}
                         onChange={(e) =>
-                          setFormData({ ...formData, hora: e.target.value })
+                          setFormData({ ...formData, horario: e.target.value })
                         }
                       />
                     </Form.Group>

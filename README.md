@@ -36,9 +36,17 @@ Si querés levantar este proyecto en tu computadora, seguí estos pasos:
 4.  **Variables de Entorno:**
     Crea un archivo llamado `.env` en la raíz del proyecto y agrega la URL del backend:
     ```env
-    VITE_API_URL=http://localhost:4000/api # O la ruta que use tu equipo
+       VITE_EMAILJS_PUBLIC_KEY=Ph32aEtB3r4LFL74P
     ```
-
+    ```env
+       VITE_WEATHER_API_KEY=65a1dfdad161684160d28caa8878c4b2
+    ```
+    ```env
+       VITE_EMAILJS_PUBLIC_KEY=Ph32aEtB3r4LFL74P
+    ```
+    ```env
+       VITE_EMAILJS_TEMPLATE_ID=template_rxf5wrn
+    ```
 5.  **Levantar el servidor de desarrollo:**
     ```bash
     npm run dev

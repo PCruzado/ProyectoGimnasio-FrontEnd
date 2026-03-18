@@ -82,7 +82,6 @@ const RegisterModal = ({ show, handleClose, onSwitchToLogin }) => {
         });
         return;
       }
-      console.info("Datos de registro para el backend:", form);
 
       Swal.fire({
         title: "¡Cuenta Creada!",

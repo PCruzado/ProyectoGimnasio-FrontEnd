@@ -48,7 +48,6 @@ const PlanDetail = () => {
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       )
       .then((response) => {
-        console.info("ÉXITO!", response.status, response.text);
         Swal.fire({
           title: "¡Éxito!",
           text: "Revisá tu correo para confirmar",

@@ -2,10 +2,6 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import Home from "./components/pages/Home";
 import PlanDetail from "./components/pages/PlanDetail";
 import Error404 from "./components/pages/Error404";
-<<<<<<< HEAD
-import Layout from "./components/common/Layout"; // Para Navbar y Footer constantes
-import AboutUs from "./components/pages/AboutUs"; // Página del equipo
-=======
 import Layout from "./components/common/Layout";
 import AboutUs from "./components/pages/AboutUs";
 import Admin from "./components/pages/Admin";
@@ -14,7 +10,6 @@ import StaffDetail from "./components/pages/StaffDetail";
 import ProductDetail from "./components/pages/ProductDetail";
 import Contact from "./components/pages/Contact";
 import Reservation from "./components/pages/Reservation";
->>>>>>> dev
 
 const router = createBrowserRouter([
   {

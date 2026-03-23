@@ -12,6 +12,7 @@ import {
   Form,
   Spinner,
 } from "react-bootstrap";
+import { useForm } from "react-hook-form"; // Importación clave
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -50,7 +51,17 @@ const Admin = () => {
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [activeTab, setActiveTab] = useState("clases");
-  const [formData, setFormData] = useState({});
+  const [selectedId, setSelectedId] = useState(null);
+
+  // Inicialización de React Hook Form
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    mode: "onTouched",
+  });
 
   const loggedUser = JSON.parse(localStorage.getItem("user-rolling-gym"));
   const token = loggedUser?.token;
@@ -62,33 +73,30 @@ const Admin = () => {
   const fetchData = async () => {
     const config = { headers: { Authorization: `Bearer ${token}` } };
     try {
-      const resUsers = await axios.get(`${API_URL}/api/usuarios`, config);
+      const [resUsers, resClases, resProds] = await Promise.all([
+        axios.get(`${API_URL}/api/usuarios`, config),
+        axios.get(`${API_URL}/api/clases`),
+        axios.get(`${API_URL}/api/productos`),
+      ]);
       setUsuarios(resUsers.data);
-    } catch (e) {
-      console.error("Error usuarios", e);
-    }
-    try {
-      const resClases = await axios.get(`${API_URL}/api/clases`);
       setClases(resClases.data);
-    } catch (e) {
-      console.error("Error clases", e);
-    }
-    try {
-      const resProds = await axios.get(`${API_URL}/api/productos`);
       setProductos(resProds.data);
     } catch (e) {
-      console.error("Error productos", e);
+      console.error("Error al cargar datos", e);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleOpenModal = (item = null) => {
     if (item) {
       setEditMode(true);
-      setFormData(item);
+      setSelectedId(item._id);
+      reset(item); // Carga los datos del item en el formulario
     } else {
       setEditMode(false);
-      setFormData(
+      setSelectedId(null);
+      reset(
         activeTab === "clases"
           ? { nombreClase: "", profesor: "", fecha: "", horario: "" }
           : {
@@ -101,6 +109,30 @@ const Admin = () => {
       );
     }
     setShowModal(true);
+  };
+
+  const onSubmit = async (data) => {
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    try {
+      if (editMode) {
+        await axios.put(
+          `${API_URL}/api/${activeTab}/${selectedId}`,
+          data,
+          config,
+        );
+      } else {
+        await axios.post(`${API_URL}/api/${activeTab}`, data, config);
+      }
+      setShowModal(false);
+      fetchData();
+      Swal.fire(
+        "¡Éxito!",
+        "Los cambios fueron procesados en Rolling Gym.",
+        "success",
+      );
+    } catch (error) {
+      Swal.fire("Error", "No se pudo guardar la información.", "error");
+    }
   };
 
   const handleDelete = async (id, endpoint) => {
@@ -124,27 +156,6 @@ const Admin = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const config = { headers: { Authorization: `Bearer ${token}` } };
-    try {
-      if (editMode) {
-        await axios.put(
-          `${API_URL}/api/${activeTab}/${formData._id}`,
-          formData,
-          config,
-        );
-      } else {
-        await axios.post(`${API_URL}/api/${activeTab}`, formData, config);
-      }
-      setShowModal(false);
-      fetchData();
-      Swal.fire("Éxito", "Cambios guardados", "success");
-    } catch (error) {
-      Swal.fire("Error", "Problema al guardar", "error");
-    }
-  };
-
   if (loading)
     return (
       <Spinner
@@ -161,7 +172,7 @@ const Admin = () => {
           Hola, <span className="text-primary">{loggedUser?.nombre}</span>!
         </h1>
         <p className="text-secondary mb-0">
-          Gestión de Rolling Gym v1.1.1 | San Miguel de Tucumán
+          Gestión de Rolling Gym v1.2.0 | San Miguel de Tucumán
         </p>
       </div>
 
@@ -172,7 +183,7 @@ const Admin = () => {
         {activeTab !== "usuarios" && (
           <Button
             variant="primary"
-            className="fw-bold"
+            className="fw-bold px-4"
             onClick={() => handleOpenModal()}
           >
             + NUEVA {activeTab.toUpperCase().slice(0, -1)}
@@ -229,6 +240,7 @@ const Admin = () => {
             </tbody>
           </Table>
         </Tab>
+
         {/* Pestaña Usuarios */}
         <Tab eventKey="usuarios" title="USUARIOS">
           <Table responsive variant="dark" hover className="mt-3">
@@ -264,6 +276,7 @@ const Admin = () => {
             </tbody>
           </Table>
         </Tab>
+
         {/* Pestaña Productos */}
         <Tab eventKey="productos" title="PRODUCTOS">
           <Table responsive variant="dark" hover className="mt-3">
@@ -279,7 +292,7 @@ const Admin = () => {
               {productos.map((p) => (
                 <tr key={p._id}>
                   <td>{p.nombre}</td>
-                  <td className="text-primary">${p.precio}</td>
+                  <td className="text-primary fw-bold">${p.precio}</td>
                   <td>{p.categoria}</td>
                   <td>
                     <Button
@@ -305,6 +318,7 @@ const Admin = () => {
         </Tab>
       </Tabs>
 
+      {/* MODAL CON VALIDACIONES */}
       <Modal
         show={showModal}
         onHide={() => setShowModal(false)}
@@ -321,46 +335,48 @@ const Admin = () => {
             {activeTab.toUpperCase().slice(0, -1)}
           </Modal.Title>
         </Modal.Header>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <Modal.Body>
             {activeTab === "clases" ? (
               <>
                 <Form.Group className="mb-3">
                   <Form.Label>Disciplina (Clase)</Form.Label>
                   <Form.Select
-                    required
+                    isInvalid={!!errors.nombreClase}
+                    {...register("nombreClase", {
+                      required: "Elegí una disciplina",
+                    })}
                     className="bg-black text-light border-secondary"
-                    value={formData.nombreClase || ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, nombreClase: e.target.value })
-                    }
                   >
-                    <option value="">Seleccioná una clase...</option>
+                    <option value="">Seleccioná...</option>
                     {DISCIPLINAS.map((d) => (
                       <option key={d} value={d}>
                         {d}
                       </option>
                     ))}
                   </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.nombreClase?.message}
+                  </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                   <Form.Label>Profesor</Form.Label>
                   <Form.Select
-                    required
+                    isInvalid={!!errors.profesor}
+                    {...register("profesor", { required: "Elegí un profesor" })}
                     className="bg-black text-light border-secondary"
-                    value={formData.profesor || ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, profesor: e.target.value })
-                    }
                   >
-                    <option value="">Seleccioná un profesor...</option>
+                    <option value="">Seleccioná...</option>
                     {STAFF.map((s) => (
                       <option key={s} value={s}>
                         {s}
                       </option>
                     ))}
                   </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.profesor?.message}
+                  </Form.Control.Feedback>
                 </Form.Group>
 
                 <Row>
@@ -369,12 +385,11 @@ const Admin = () => {
                       <Form.Label>Fecha</Form.Label>
                       <Form.Control
                         type="date"
-                        required
+                        isInvalid={!!errors.fecha}
+                        {...register("fecha", {
+                          required: "Campo obligatorio",
+                        })}
                         className="bg-black text-light border-secondary"
-                        value={formData.fecha || ""}
-                        onChange={(e) =>
-                          setFormData({ ...formData, fecha: e.target.value })
-                        }
                       />
                     </Form.Group>
                   </Col>
@@ -383,12 +398,11 @@ const Admin = () => {
                       <Form.Label>Hora</Form.Label>
                       <Form.Control
                         type="time"
-                        required
+                        isInvalid={!!errors.horario}
+                        {...register("horario", {
+                          required: "Campo obligatorio",
+                        })}
                         className="bg-black text-light border-secondary"
-                        value={formData.horario || ""}
-                        onChange={(e) =>
-                          setFormData({ ...formData, horario: e.target.value })
-                        }
                       />
                     </Form.Group>
                   </Col>
@@ -399,38 +413,46 @@ const Admin = () => {
                 <Form.Group className="mb-3">
                   <Form.Label>Nombre del Producto</Form.Label>
                   <Form.Control
-                    type="text"
-                    required
+                    isInvalid={!!errors.nombre}
+                    {...register("nombre", {
+                      required: "El nombre es obligatorio",
+                      minLength: { value: 3, message: "Mínimo 3 letras" },
+                    })}
                     className="bg-black text-light border-secondary"
-                    value={formData.nombre || ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, nombre: e.target.value })
-                    }
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.nombre?.message}
+                  </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                   <Form.Label>Precio</Form.Label>
                   <Form.Control
                     type="number"
-                    required
+                    step="0.01"
+                    isInvalid={!!errors.precio}
+                    {...register("precio", {
+                      required: "El precio es obligatorio",
+                      min: {
+                        value: 0.01,
+                        message: "El precio debe ser un valor positivo",
+                      },
+                    })}
                     className="bg-black text-light border-secondary"
-                    value={formData.precio || ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, precio: e.target.value })
-                    }
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.precio?.message}
+                  </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                   <Form.Label>Categoría</Form.Label>
                   <Form.Select
-                    required
+                    isInvalid={!!errors.categoria}
+                    {...register("categoria", {
+                      required: "Seleccioná una categoría",
+                    })}
                     className="bg-black text-light border-secondary"
-                    value={formData.categoria || ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, categoria: e.target.value })
-                    }
                   >
                     <option value="">Seleccionar...</option>
                     {CATEGORIAS.map((cat) => (
@@ -439,18 +461,19 @@ const Admin = () => {
                       </option>
                     ))}
                   </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.categoria?.message}
+                  </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                   <Form.Label>Imagen URL</Form.Label>
                   <Form.Control
-                    type="text"
-                    required
+                    isInvalid={!!errors.imagen}
+                    {...register("imagen", {
+                      required: "La URL de la imagen es necesaria",
+                    })}
                     className="bg-black text-light border-secondary"
-                    value={formData.imagen || ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, imagen: e.target.value })
-                    }
                   />
                 </Form.Group>
 
@@ -459,12 +482,11 @@ const Admin = () => {
                   <Form.Control
                     as="textarea"
                     rows={3}
-                    required
+                    isInvalid={!!errors.descripcion}
+                    {...register("descripcion", {
+                      required: "Escribí una breve descripción",
+                    })}
                     className="bg-black text-light border-secondary"
-                    value={formData.descripcion || ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, descripcion: e.target.value })
-                    }
                   />
                 </Form.Group>
               </>
@@ -474,7 +496,11 @@ const Admin = () => {
             <Button variant="outline-light" onClick={() => setShowModal(false)}>
               Cancelar
             </Button>
-            <Button variant="primary" type="submit" className="fw-bold px-4">
+            <Button
+              variant="primary"
+              type="submit"
+              className="fw-bold px-4 shadow"
+            >
               GUARDAR CAMBIOS
             </Button>
           </Modal.Footer>

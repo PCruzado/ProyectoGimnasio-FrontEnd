@@ -105,7 +105,7 @@ const PlanDetail = () => {
                     {...register("user_name", { 
                       required: "El nombre es obligatorio",
                       minLength: { value: 3, message: "Mínimo 3 caracteres" },
-                      maxLength: { value: 10, message: "Máximo 10 caracteres" },
+                      maxLength: { value: 20, message: "Máximo 20 caracteres" },
                       validate: (value) => value.trim() !== "" || "No puede contener solo espacios"
                     })}
                   />

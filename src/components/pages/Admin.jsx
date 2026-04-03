@@ -332,7 +332,7 @@ const handleOpenInscriptos = (clase) => {
         <Modal.Body>
           {claseSeleccionada?.usuariosInscriptos?.length > 0 ? (
             <ListGroup variant="flush">
-              {claseSeleccionada.usuariosAnotados.map(alumno => (
+              {claseSeleccionada.usuariosInscriptos.map(alumno => (
                 <ListGroup.Item key={alumno._id} className="bg-dark text-light border-secondary d-flex justify-content-between align-items-center">
                   <div>
                     <strong className="text-primary">{alumno.nombre} {alumno.apellido}</strong><br/>

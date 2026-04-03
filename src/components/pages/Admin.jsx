@@ -35,6 +35,16 @@ const Admin = () => {
   const [claseSeleccionada, setClaseSeleccionada] = useState(null);
 
 const handleOpenInscriptos = (clase) => {
+    if (!clase.usuariosInscriptos || clase.usuariosInscriptos.length === 0) {
+      Swal.fire({
+        title: "Clase vacía",
+        text: "No hay alumnos inscriptos en esta clase todavía.",
+        icon: "info",
+        confirmButtonColor: "#ff4d00", 
+      });
+      return; 
+    }
+
     setClaseSeleccionada(clase);
     setShowInscriptosModal(true);
   };
@@ -170,6 +180,7 @@ const handleOpenInscriptos = (clase) => {
                       variant="outline-info" 
                       size="sm" 
                       onClick={() => handleOpenInscriptos(c)}
+                      disabled={!c.usuariosInscriptos || c.usuariosInscriptos.length === 0}
                     >
                       <i className="bi bi-eye"></i> Ver
                     </Button>

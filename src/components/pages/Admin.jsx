@@ -165,7 +165,7 @@ const handleOpenInscriptos = (clase) => {
                   <td>{c.profesor?.nombre || c.profesor}</td>
                   <td>{c.fecha} - {c.horario}hs</td>
                   <td className="align-middle">
-                    <span className="me-2">{c.usuariosAnotados?.length || 0} alumnos</span>
+                    <span className="me-2">{c.usuariosInscriptos?.length || 0} alumnos</span>
                     <Button 
                       variant="outline-info" 
                       size="sm" 
@@ -330,7 +330,7 @@ const handleOpenInscriptos = (clase) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {claseSeleccionada?.usuariosAnotados?.length > 0 ? (
+          {claseSeleccionada?.usuariosInscriptos?.length > 0 ? (
             <ListGroup variant="flush">
               {claseSeleccionada.usuariosAnotados.map(alumno => (
                 <ListGroup.Item key={alumno._id} className="bg-dark text-light border-secondary d-flex justify-content-between align-items-center">

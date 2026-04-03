@@ -11,6 +11,7 @@ import {
   Modal,
   Form,
   Spinner,
+  ListGroup
 } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -30,6 +31,13 @@ const Admin = () => {
   const [editMode, setEditMode] = useState(false);
   const [activeTab, setActiveTab] = useState("clases");
   const [selectedId, setSelectedId] = useState(null);
+  const [showInscriptosModal, setShowInscriptosModal] = useState(false);
+  const [claseSeleccionada, setClaseSeleccionada] = useState(null);
+
+const handleOpenInscriptos = (clase) => {
+    setClaseSeleccionada(clase);
+    setShowInscriptosModal(true);
+  };
 
   const {
     register,
@@ -81,7 +89,6 @@ const Admin = () => {
     setShowModal(true);
   };
 
-  // onSubmit: La capa de seguridad lógica antes del HTTP
   const onSubmit = async (data) => {
     const config = { headers: { Authorization: `Bearer ${token}` } };
     try {
@@ -94,7 +101,6 @@ const Admin = () => {
       fetchData();
       Swal.fire("¡Éxito!", "Los cambios fueron procesados en Rolling Gym.", "success");
     } catch (error) {
-      // Captura de errores amigable del backend
       const errorMsg = error.response?.data?.mensaje || "No se pudo guardar la información. Por favor, revisá los campos.";
       Swal.fire("Error de Servidor", errorMsg, "error");
     }
@@ -141,15 +147,34 @@ const Admin = () => {
 
       <Tabs activeKey={activeTab} onSelect={(k) => setActiveTab(k)} className="mb-4" justify>
         <Tab eventKey="clases" title="CLASES">
-            {/* ... Tabla de Clases (igual a la anterior) ... */}
+            {}
             <Table responsive variant="dark" hover className="mt-3">
-            <thead><tr><th>Clase</th><th>Profesor</th><th>Horario</th><th>Acciones</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Clase</th>
+                <th>Profesor</th>
+                <th>Horario</th>
+                <th>Inscriptos</th> 
+                <th>Acciones</th>
+              </tr>
+            </thead>
             <tbody>
               {clases.map((c) => (
                 <tr key={c._id}>
-                  <td><Badge bg="primary">{c.nombreClase}</Badge></td>
-                  <td>{c.profesor}</td>
+                  <td><Badge bg="primary">{c.nombreClase || c.nombre}</Badge></td>
+                  <td>{c.profesor?.nombre || c.profesor}</td>
                   <td>{c.fecha} - {c.horario}hs</td>
+                  <td className="align-middle">
+                    <span className="me-2">{c.usuariosAnotados?.length || 0} alumnos</span>
+                    <Button 
+                      variant="outline-info" 
+                      size="sm" 
+                      onClick={() => handleOpenInscriptos(c)}
+                    >
+                      <i className="bi bi-eye"></i> Ver
+                    </Button>
+                  </td>
+                  
                   <td>
                     <Button variant="outline-warning" size="sm" className="me-2" onClick={() => handleOpenModal(c)}><i className="bi bi-pencil"></i></Button>
                     <Button variant="outline-danger" size="sm" onClick={() => handleDelete(c._id, "clases")}><i className="bi bi-trash"></i></Button>
@@ -160,7 +185,7 @@ const Admin = () => {
           </Table>
         </Tab>
         <Tab eventKey="usuarios" title="USUARIOS">
-            {/* ... Tabla de Usuarios (igual a la anterior) ... */}
+            {}
             <Table responsive variant="dark" hover className="mt-3">
             <thead><tr><th>Nombre</th><th>Email</th><th>Plan</th><th>Acciones</th></tr></thead>
             <tbody>
@@ -297,6 +322,32 @@ const Admin = () => {
             </Button>
           </Modal.Footer>
         </Form>
+      </Modal>
+      <Modal show={showInscriptosModal} onHide={() => setShowInscriptosModal(false)} centered contentClassName="bg-dark text-light border-secondary">
+        <Modal.Header closeButton closeVariant="white" className="border-secondary">
+          <Modal.Title className="fw-bold">
+            Alumnos inscriptos: <span className="text-primary">{claseSeleccionada?.nombreClase || claseSeleccionada?.nombre}</span>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {claseSeleccionada?.usuariosAnotados?.length > 0 ? (
+            <ListGroup variant="flush">
+              {claseSeleccionada.usuariosAnotados.map(alumno => (
+                <ListGroup.Item key={alumno._id} className="bg-dark text-light border-secondary d-flex justify-content-between align-items-center">
+                  <div>
+                    <strong className="text-primary">{alumno.nombre} {alumno.apellido}</strong><br/>
+                    <small className="text-muted">{alumno.email}</small>
+                  </div>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          ) : (
+            <p className="text-muted text-center my-4">Aún no hay alumnos inscriptos en esta clase.</p>
+          )}
+        </Modal.Body>
+        <Modal.Footer className="border-secondary">
+          <Button variant="outline-light" onClick={() => setShowInscriptosModal(false)}>Cerrar</Button>
+        </Modal.Footer>
       </Modal>
     </Container>
   );

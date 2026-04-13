@@ -21,7 +21,7 @@ Si querés levantar este proyecto en tu computadora, seguí estos pasos:
 
 1. **Clonar el repositorio:**
    ```bash
-   git clone [https://github.com/PCruzado/ProyectoGimnasio-FrontEnd.git](https://github.com/PCruzado/ProyectoGimnasio-FrontEnd.git)
+   git clone https://github.com/PCruzado/ProyectoGimnasio-FrontEnd.git
 Ingresar a la carpeta del proyecto:
 
 Bash

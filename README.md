@@ -1,4 +1,3 @@
-
 # 🏋️‍♂️ Proyecto Gimnasio - FrontEnd
 
 Aplicación web para la gestión de un gimnasio. Este proyecto incluye un sistema de autenticación, rutas protegidas para administradores y una interfaz dinámica para mejorar la experiencia de los usuarios.
@@ -6,7 +5,6 @@ Aplicación web para la gestión de un gimnasio. Este proyecto incluye un sistem
 ## 🛠️ Tecnologías Utilizadas
 
 Este proyecto está construido con las siguientes herramientas principales:
-
 * **Core:** React 19 (entorno configurado con Vite)
 * **Enrutamiento:** React Router 7
 * **Estilos y Componentes:** Bootstrap 5 y React Bootstrap
@@ -21,25 +19,43 @@ Si querés levantar este proyecto en tu computadora, seguí estos pasos:
 
 1. **Clonar el repositorio:**
    ```bash
-   git clone https://github.com/PCruzado/ProyectoGimnasio-FrontEnd.git
-Ingresar a la carpeta del proyecto:
+   git clone [https://github.com/PCruzado/ProyectoGimnasio-FrontEnd.git](https://github.com/PCruzado/ProyectoGimnasio-FrontEnd.git)
 
-Bash
+2. **Ingresar a la carpeta del proyecto:**
+       ```bash
+   cd ProyectoGimnasio-FrontEnd
+       ```
+2. ## Ingresar a la carpeta del proyecto:
+```bash
 cd ProyectoGimnasio-FrontEnd
-Instalar las dependencias:
-
-Bash
+```
+3. ## Instalar las dependencias:
+```bash
 npm install
-Variables de Entorno: Crea un archivo llamado .env en la raíz del proyecto y agrega la URL del backend:
+```
+4. ## Variables de Entorno: 
+Crea un archivo llamado .env en la raíz del proyecto basándote en la siguiente estructura. Deberás completar los valores con los datos correspondientes:
 
-Fragmento de código
-VITE_API_URL=http://localhost:4000/api # O la ruta que use tu equipo
-Levantar el servidor de desarrollo:
+### URL base para conectar con el backend
+```bash
+VITE_API_URL=http://localhost:4000/api
+```
+### Credenciales de EmailJS (si aplica)
+```bash
+# VITE_EMAILJS_SERVICE_ID=tu_service_id
+# VITE_EMAILJS_TEMPLATE_ID=tu_template_id
+# VITE_EMAILJS_PUBLIC_KEY=tu_public_key
+```
+(Nota: si usan Cloudinary u otras APIs en el front, agregá el nombre de esas variables a la lista de arriba, siempre dejándolas vacías o con un ejemplo genérico).
 
-Bash
+5. ## Levantar el servidor de desarrollo:
+
+```bash
 npm run dev
-## 👥 Equipo de Desarrollo
-Marcos Lautaro Molina
-Facundo Javier Vera
-Pablo Cruzado
-Nicolas Bulacio
+```
+
+👥 Equipo de Desarrollo
+- Marcos Lautaro Molina
+- Facundo Javier Vera
+- Pablo Cruzado
+- Nicolas Bulacio
